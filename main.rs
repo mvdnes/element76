@@ -4,6 +4,7 @@
 
 #![no_std]
 #![feature(globs)]
+#![feature(asm)]
 
 extern crate core;
 
@@ -41,4 +42,10 @@ pub fn main()
 			_ => 14,
 		});
 	}
+	halt();
+}
+
+fn halt()
+{
+	unsafe { asm!("hlt"); }
 }
