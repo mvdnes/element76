@@ -34,6 +34,11 @@ pub fn main()
 	let hw = "Hello, World!";
 	for i in range(0u, hw.len())
 	{
-		write_screen(3+i, 3, hw[i], 15);
+		write_screen(3+i, 3, hw[i],
+		match hw[i]
+		{
+			0x61..0x7A => 11, // Lowercase ASCII
+			_ => 14,
+		});
 	}
 }
