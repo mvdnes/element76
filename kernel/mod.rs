@@ -6,7 +6,7 @@ use platform::vga::{write_screen, LightRed, Black, Yellow, LightCyan};
 pub fn start()
 {
 	main();
-	unsafe { asm!("hlt"); }
+	::platform::cpu::halt();
 }
 
 fn main()
