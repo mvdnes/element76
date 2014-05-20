@@ -1,4 +1,4 @@
-;;kernel.asm
+;;init.asm
 
 ;nasm directive - 32 bit
 bits 32
