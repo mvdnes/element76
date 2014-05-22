@@ -8,6 +8,7 @@ extern crate core;
 mod platform {
 	pub mod vga;
 	pub mod cpu;
+	pub mod io;
 }
 
 pub mod kernel;

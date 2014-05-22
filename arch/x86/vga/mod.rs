@@ -1,4 +1,5 @@
 use core::prelude::*;
+use platform::io::outport;
 
 pub enum Color {
     Black = 0,
@@ -19,9 +20,12 @@ pub enum Color {
     White = 15,
 }
 
+static ROWS: uint = 25;
+static COLS: uint = 80;
+
 pub fn write_screen(xpos: uint, ypos: uint, value: u8, fg: Option<Color>, bg: Option<Color>)
 {
-	if xpos >= 80 || ypos >= 25 { return }
+	if xpos >= COLS || ypos >= ROWS { return }
 	unsafe
 	{
 		let index = 0xb8000 + ypos*160 + xpos*2;
@@ -36,5 +40,19 @@ pub fn write_screen(xpos: uint, ypos: uint, value: u8, fg: Option<Color>, bg: Op
 			Some(color) => { *ptr &= 0x0F; *ptr |= color as u8 << 4; },
 			None => {},
 		}
+	}
+	move_cursor(xpos, ypos);
+}
+
+pub fn move_cursor(xpos: uint, ypos: uint)
+{
+	if xpos >= COLS || ypos >= COLS { return };
+	let pos = ypos * COLS + xpos;
+	unsafe
+	{
+		outport(0x3D4, 14);
+		outport(0x3D5, pos >> 8);
+		outport(0x3D4, 15);
+		outport(0x3D5, pos);
 	}
 }
