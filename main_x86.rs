@@ -12,4 +12,7 @@ mod platform {
 	pub mod keyboard;
 }
 
-pub mod kernel;
+pub mod kernel {
+	pub mod main;
+	mod keyboard;
+}

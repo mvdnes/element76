@@ -1,14 +1,13 @@
 use core::prelude::*;
 use platform::vga::{write_screen, LightRed, Black, Yellow, LightCyan};
-use platform::keyboard;
-use platform::keyboard::{KeyDown, Printable, Alt};
+use kernel::keyboard;
+use kernel::keyboard::{KeyDown, Printable, Space, Escape};
 
 #[no_mangle]
 #[no_split_stack]
 pub fn start()
 {
 	main();
-	::platform::cpu::halt();
 }
 
 fn main()
@@ -38,7 +37,8 @@ fn main()
 		match keyboard::get_key()
 		{
 			KeyDown(Printable(c)) => write_screen(0, 0, c as u8, Some(Black), None),
-			KeyDown(Alt) => break 'keyloop,
+			KeyDown(Space) => write_screen(0, 0, ' ' as u8, Some(Black), None),
+			KeyDown(Escape) => break 'keyloop,
 			_ => {},
 		};
 	}
