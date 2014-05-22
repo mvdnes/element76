@@ -1,5 +1,5 @@
 use core::prelude::*;
-use platform::io::outport;
+use platform::io;
 
 pub enum Color {
     Black = 0,
@@ -50,9 +50,9 @@ pub fn move_cursor(xpos: uint, ypos: uint)
 	let pos = ypos * COLS + xpos;
 	unsafe
 	{
-		outport(0x3D4, 14);
-		outport(0x3D5, pos >> 8);
-		outport(0x3D4, 15);
-		outport(0x3D5, pos);
+		io::outport(0x3D4, 14);
+		io::outport(0x3D5, (pos >> 8) as u8);
+		io::outport(0x3D4, 15);
+		io::outport(0x3D5, pos as u8);
 	}
 }
