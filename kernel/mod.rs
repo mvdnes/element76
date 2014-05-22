@@ -1,5 +1,7 @@
 use core::prelude::*;
 use platform::vga::{write_screen, LightRed, Black, Yellow, LightCyan};
+use platform::keyboard;
+use platform::keyboard::{KeyDown, Printable, Alt};
 
 #[no_mangle]
 #[no_split_stack]
@@ -31,29 +33,13 @@ fn main()
 		write_screen(5+i, 5, hw[i], Some(Black), None);
 	}
 
-	loop
+	'keyloop: loop
 	{
-		let code = unsafe { ::platform::io::inport(0x60) };
-		if code & 0x80 == 0
+		match keyboard::get_key()
 		{
-			let ccode = match code
-			{
-				 2 => '1',
-				 3 => '2',
-				 4 => '3',
-				 5 => '4',
-				 6 => '5',
-				 7 => '6',
-				 8 => '7',
-				 9 => '8',
-				10 => '9',
-				11 => '0',
-				_ => '\0',
-			};
-			if ccode != '\0'
-			{
-				write_screen(0, 0, ccode as u8, Some(Black), None);
-			}
-		}
+			KeyDown(Printable(c)) => write_screen(0, 0, c as u8, Some(Black), None),
+			KeyDown(Alt) => break 'keyloop,
+			_ => {},
+		};
 	}
 }
