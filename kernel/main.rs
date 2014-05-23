@@ -8,6 +8,7 @@ use kernel::keyboard::{KeyDown, Printable, Space, Escape};
 pub fn start()
 {
 	main();
+	loop { ::platform::cpu::halt(); }
 }
 
 fn main()
