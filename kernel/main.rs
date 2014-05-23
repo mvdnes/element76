@@ -7,6 +7,7 @@ use kernel::keyboard::{KeyDown, Printable, Space, Escape};
 #[no_split_stack]
 pub fn start()
 {
+	::platform::cpu::setup();
 	main();
 	loop { ::platform::cpu::halt(); }
 }
@@ -37,6 +38,7 @@ fn main()
 	{
 		match keyboard::get_key()
 		{
+			KeyDown(Printable('7')) => unsafe { asm!("int $$0x03"); },
 			KeyDown(Printable(c)) => write_screen(0, 0, c as u8, Some(Black), None),
 			KeyDown(Space) => write_screen(0, 0, ' ' as u8, Some(Black), None),
 			KeyDown(Escape) => break 'keyloop,

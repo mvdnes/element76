@@ -14,5 +14,6 @@ mod platform {
 
 pub mod kernel {
 	pub mod main;
+	pub mod interrupts;
 	mod keyboard;
 }

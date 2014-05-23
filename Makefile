@@ -5,7 +5,9 @@ LD?=ld
 ARCH_DEPENDENCIES=$(wildcard arch/x86/*/*.rs)
 KERNEL_DEPENDENCIES=$(wildcard kernel/*.rs)
 RUST_DEPENDENCIES=$(ARCH_DEPENDENCIES) $(KERNEL_DEPENDENCIES)
-ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard *.asm))
+MAIN_ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard *.asm))
+ARCH_ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard arch/x86/asm/*.asm))
+ASSEMBLIES=$(MAIN_ASSEMBLIES) $(ARCH_ASSEMBLIES)
 
 all: kernel.bin
 
