@@ -1,4 +1,3 @@
-use core::prelude::*;
 use platform::io;
 
 pub enum Color {
@@ -20,28 +19,36 @@ pub enum Color {
     White = 15,
 }
 
-static ROWS: uint = 25;
-static COLS: uint = 80;
+pub static ROWS: uint = 25;
+pub static COLS: uint = 80;
 
-pub fn write_screen(xpos: uint, ypos: uint, value: u8, fg: Option<Color>, bg: Option<Color>)
+pub fn putc(xpos: uint, ypos: uint, value: u8)
 {
 	if xpos >= COLS || ypos >= ROWS { return }
 	unsafe
 	{
-		let index = 0xb8000 + ypos*160 + xpos*2;
-		*(index as *mut u8) = value;
-		let ptr = (index + 1) as *mut u8;
-
-		match fg {
-			Some(color) => { *ptr &= 0xF0; *ptr |= color as u8; },
-			None => {},
-		}
-		match bg {
-			Some(color) => { *ptr &= 0x0F; *ptr |= color as u8 << 4; },
-			None => {},
-		}
+		*((0xb8000 + ypos * COLS * 2 + xpos * 2) as *mut u8) = value;
 	}
-	move_cursor(xpos, ypos);
+}
+
+pub fn setfg(xpos: uint, ypos: uint, value: Color)
+{
+	if xpos >= COLS || ypos >= ROWS { return }
+	unsafe
+	{
+		let ptr = (0xb8000 + ypos * COLS * 2 + xpos * 2 + 1) as *mut u8;
+		*ptr = (*ptr & 0xF0) | (value as u8 & 0x0F);
+	}
+}
+
+pub fn setbg(xpos: uint, ypos: uint, value: Color)
+{
+	if xpos >= COLS || ypos >= ROWS { return }
+	unsafe
+	{
+		let ptr = (0xb8000 + ypos * COLS * 2 + xpos * 2 + 1) as *mut u8;
+		*ptr = (*ptr & 0x0F) | ((value as u8 << 4) & 0xF0);
+	}
 }
 
 pub fn move_cursor(xpos: uint, ypos: uint)

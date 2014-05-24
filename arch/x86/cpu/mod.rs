@@ -1,22 +1,22 @@
 #[packed]
 pub struct Registers
 {
-	ds: u32,
-	edi: u32,
-	esi: u32,
-	ebp: u32,
-	esp: u32,
-	ebx: u32,
-	edx: u32,
-	ecx: u32,
-	eax: u32,
-	interrupt_number: u32,
-	error_code: u32,
-	eip: u32,
-	cs: u32,
-	eflags: u32,
-	useresp: u32,
-	ss: u32
+	pub ds: u32,
+	pub edi: u32,
+	pub esi: u32,
+	pub ebp: u32,
+	pub esp: u32,
+	pub ebx: u32,
+	pub edx: u32,
+	pub ecx: u32,
+	pub eax: u32,
+	pub interrupt_number: u32,
+	pub error_code: u32,
+	pub eip: u32,
+	pub cs: u32,
+	pub eflags: u32,
+	pub useresp: u32,
+	pub ss: u32
 }
 
 pub fn halt()
@@ -191,5 +191,5 @@ unsafe fn idt_set_gate(n: uint, base: u32, sel: u16, flags: u8)
 
 	idt_entries[n].selector = sel;
 	idt_entries[n].zero = 0;
-	idt_entries[n].flags = (flags & 0b11100000) | 0b00110;
+	idt_entries[n].flags = (flags & 0b11100000) | 0b01110;
 }

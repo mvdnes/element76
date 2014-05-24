@@ -1,5 +1,6 @@
 use core::prelude::*;
-use platform::vga::{write_screen, LightRed, Black, Yellow, LightCyan};
+use platform::vga::{LightRed, Black};
+use kernel::stdio;
 use kernel::keyboard;
 use kernel::keyboard::{KeyDown, Printable, Space, Escape};
 
@@ -14,33 +15,17 @@ pub fn start()
 
 fn main()
 {
-	for x in range(0u, 80)
-	{
-		for y in range(0u, 25)
-		{
-			write_screen(x, y, ' ' as u8, None, Some(LightRed));
-		}
-	}
-
-	let hw = " Hello, World! ";
-	for i in range(0u, hw.len())
-	{
-		write_screen(3+i, 3, hw[i],
-		Some(match hw[i]
-		{
-			0x61..0x7A => LightCyan, // Lowercase ASCII
-			_ => Yellow,
-		}), Some(Black));
-		write_screen(5+i, 5, hw[i], Some(Black), None);
-	}
+	stdio::clear_screen(LightRed);
+	stdio::write_screen(3, 3, " Hello, World! ", Some(Black), None);
 
 	'keyloop: loop
 	{
 		match keyboard::get_key()
 		{
 			KeyDown(Printable('7')) => unsafe { asm!("int $$0x03"); },
-			KeyDown(Printable(c)) => write_screen(0, 0, c as u8, Some(Black), None),
-			KeyDown(Space) => write_screen(0, 0, ' ' as u8, Some(Black), None),
+			KeyDown(Printable('9')) => unsafe { asm!("int $$0x04"); },
+			KeyDown(Printable(c)) => { stdio::write_char(0, 0, c, Some(Black), None); },
+			KeyDown(Space) => { stdio::write_char(0, 0, ' ', Some(Black), None); },
 			KeyDown(Escape) => break 'keyloop,
 			_ => {},
 		};
