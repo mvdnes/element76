@@ -22,8 +22,8 @@ fn main()
 	{
 		match keyboard::get_key()
 		{
-			KeyDown(Printable('7')) => unsafe { asm!("int $$0x03"); },
-			KeyDown(Printable('9')) => unsafe { asm!("int $$0x04"); },
+			KeyDown(Printable('7')) => unsafe { asm!("int $$0x23"); },
+			KeyDown(Printable('9')) => unsafe { asm!("int $$0x24"); },
 			KeyDown(Printable(c)) => { stdio::write_char(0, 0, c, Some(Black), None); },
 			KeyDown(Space) => { stdio::write_char(0, 0, ' ', Some(Black), None); },
 			KeyDown(Escape) => break 'keyloop,

@@ -1,4 +1,5 @@
-#[packed]
+use platform::io;
+
 pub struct Registers
 {
 	pub ds: u32,
@@ -26,6 +27,7 @@ pub fn halt()
 
 pub fn setup()
 {
+	remap_pic();
 	init_gdt();
 	init_idt();
 }
@@ -110,6 +112,35 @@ static mut gdt_ptr: GDTPointer = GDTPointer { limit: 0, base: 0 };
 static mut idt_entries: [IDTEntry,.. IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 },.. IDT_COUNT];
 static mut idt_ptr: IDTPointer = IDTPointer { limit: 0, base: 0 };
 
+fn remap_pic()
+{
+	unsafe
+	{
+		let a1: u8 = io::inport(0x21);
+		let a2: u8 = io::inport(0xA1);
+		io::outport(0x20, 0x11);
+		io::io_wait();
+		io::outport(0xA0, 0x11);
+		io::io_wait();
+		io::outport(0x21, 0x20);                 // ICW2: Master PIC vector offset
+		io::io_wait();
+		io::outport(0xA1, 0x20+8);                 // ICW2: Slave PIC vector offset
+		io::io_wait();
+		io::outport(0x21, 4);                       // ICW3: tell Master PIC that there is a slave PIC at IRQ2 (0000 0100)
+		io::io_wait();
+		io::outport(0xA1, 2);                       // ICW3: tell Slave PIC its cascade identity (0000 0010)
+		io::io_wait();
+
+		io::outport(0x21, 0x01);
+		io::io_wait();
+		io::outport(0xA1, 0x01);
+		io::io_wait();
+
+		io::outport(0x21, a1);   // restore saved masks.
+		io::outport(0xA1, a2);
+	}
+}
+
 fn init_gdt()
 {
 	unsafe
@@ -184,8 +215,9 @@ fn init_idt()
 	}
 }
 
-unsafe fn idt_set_gate(n: uint, base: u32, sel: u16, flags: u8)
+unsafe fn idt_set_gate(m: uint, base: u32, sel: u16, flags: u8)
 {
+	let n = m + 0x20;
 	idt_entries[n].base_low = (base & 0xFFFF) as u16;
 	idt_entries[n].base_high = ((base >> 16) & 0xFFFF) as u16;
 

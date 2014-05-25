@@ -9,3 +9,8 @@ pub unsafe fn inport(address: u16) -> u8
 	asm!("in %dx, %al" : "={al}"(result) : "{dx}"(address));
 	result
 }
+
+pub fn io_wait()
+{
+	unsafe { outport(0x80, 0); };
+}

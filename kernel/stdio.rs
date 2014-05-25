@@ -16,25 +16,47 @@ pub fn clear_screen(color: Color)
 }
 
 #[no_split_stack]
-pub fn write_hex(xpos: uint, ypos: uint, value: uint, fg: Option<Color>, bg: Option<Color>) -> (uint, uint)
+pub fn write_bin(xpos: uint, ypos: uint, value: u32, fg: Option<Color>, bg: Option<Color>) -> (uint, uint)
 {
 	let mut x = xpos;
 	let mut y = ypos;
-	let mut v = value;
-	if v == 0
+	let v = value;
+
+	let (nx, ny) = write_screen(x, y, "0x", fg, bg);
+	x = nx; y = ny;
+
+	for i in range(0, 32)
 	{
-		return write_char(xpos, ypos, '0', fg, bg);
-	}
-	while v != 0
-	{
-		let c = match v & 0xF
+		let c = match (v >> (31-i)) & 0x1
 		{
-			c if c <= 9 => (c +'0' as uint) as u8,
-			c => (c + -10 + 'A' as uint) as u8,
-		} as char;
-		let (nx, ny) = write_char(xpos, ypos, c, fg, bg);
+			0 => '0',
+			_ => '1',
+		};
+		let (nx, ny) = write_char(x, y, c, fg, bg);
 		x = nx; y = ny;
-		v >>= 8;
+	}
+	(x, y)
+}
+
+#[no_split_stack]
+pub fn write_hex(xpos: uint, ypos: uint, value: u32, fg: Option<Color>, bg: Option<Color>) -> (uint, uint)
+{
+	let mut x = xpos;
+	let mut y = ypos;
+	let v = value;
+
+	let (nx, ny) = write_screen(x, y, "0x", fg, bg);
+	x = nx; y = ny;
+
+	for i in range(0, 8)
+	{
+		let c = match (v >> 4*(7-i)) & 0xF
+		{
+			c if c <= 9 => (c + '0' as u32) as u8,
+			c => (c + -10 + 'A' as u32) as u8,
+		} as char;
+		let (nx, ny) = write_char(x, y, c, fg, bg);
+		x = nx; y = ny;
 	}
 	(x, y)
 }
