@@ -1,5 +1,7 @@
 use platform::io;
 
+pub static IRQ_OFFSET: uint = 0x20;
+
 pub struct Registers
 {
 	pub ds: u32,
@@ -11,8 +13,6 @@ pub struct Registers
 	pub edx: u32,
 	pub ecx: u32,
 	pub eax: u32,
-	pub interrupt_number: u32,
-	pub error_code: u32,
 	pub eip: u32,
 	pub cs: u32,
 	pub eflags: u32,
@@ -20,26 +20,31 @@ pub struct Registers
 	pub ss: u32
 }
 
-pub fn ack_irs()
-{
-	unsafe { io::outport(0x20, 0x20); };
-}
-
+#[no_split_stack]
 pub fn halt()
 {
 	unsafe { asm!("hlt"); };
 }
 
+pub fn request_irq3()
+{
+	unsafe
+	{
+		asm!("int $$0x23");
+	}
+}
+
+#[no_split_stack]
 pub fn setup()
 {
 	init_gdt();
 	remap_pic();
-	unsafe {
-	io::outport(0x21,0xFD); // Keyboard interrupts only
-	io::outport(0xA1,0xFF);
-	}
 	init_idt();
-	unsafe { asm!("sti") };
+	unsafe {
+		io::outport(0x21,0xFD); // Keyboard interrupts only
+		io::outport(0xA1,0xFF);
+		asm!("sti");
+	}
 }
 
 #[packed]
@@ -122,6 +127,7 @@ static mut gdt_ptr: GDTPointer = GDTPointer { limit: 0, base: 0 };
 static mut idt_entries: [IDTEntry,.. IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 },.. IDT_COUNT];
 static mut idt_ptr: IDTPointer = IDTPointer { limit: 0, base: 0 };
 
+#[no_split_stack]
 fn remap_pic()
 {
 	unsafe
@@ -151,6 +157,7 @@ fn remap_pic()
 	}
 }
 
+#[no_split_stack]
 fn init_gdt()
 {
 	unsafe
@@ -168,6 +175,7 @@ fn init_gdt()
 	};
 }
 
+#[no_split_stack]
 unsafe fn gdt_set_gate(n: uint, base: u32, limit: u32, access: u8, gran: u8)
 {
 	gdt_entries[n].base_low = (base & 0xFFFF) as u16;
@@ -181,6 +189,7 @@ unsafe fn gdt_set_gate(n: uint, base: u32, limit: u32, access: u8, gran: u8)
 	gdt_entries[n].access = access;
 }
 
+#[no_split_stack]
 fn init_idt()
 {
 	unsafe
@@ -225,13 +234,46 @@ fn init_idt()
 	}
 }
 
+#[no_split_stack]
 unsafe fn idt_set_gate(m: uint, base: u32, sel: u16, flags: u8)
 {
-	let n = m + 0x20;
+	let n = m + IRQ_OFFSET;
 	idt_entries[n].base_low = (base & 0xFFFF) as u16;
 	idt_entries[n].base_high = ((base >> 16) & 0xFFFF) as u16;
 
 	idt_entries[n].selector = sel;
 	idt_entries[n].zero = 0;
 	idt_entries[n].flags = (flags & 0b11100000) | 0b01110;
+}
+
+#[no_mangle]
+#[no_split_stack]
+pub fn isr_handler(ds: u32, edi:u32, esi:u32, ebp:u32, esp:u32, ebx:u32, edx:u32, ecx:u32, eax:u32, ino: u32, ec:u32, eip:u32, cs:u32, eflags:u32,useresp:u32,ss:u32)
+{
+	let regs = Registers
+	{
+		ds: ds,
+		edi: edi,
+		esi: esi,
+		ebp: ebp,
+		esp: esp,
+		ebx: ebx,
+		edx: edx,
+		ecx: ecx,
+		eax: eax,
+		eip: eip,
+		cs: cs,
+		eflags: eflags,
+		useresp: useresp,
+		ss: ss
+	};
+
+	::kernel::interrupts::handle_interrupt(regs, ino, ec);
+
+	// Ack IRQ
+	unsafe { io::outport(0x20, 0x20); };
+	if ino >= 8
+	{
+		unsafe { io::outport(0xa0,0x20); };
+	}
 }

@@ -17,7 +17,7 @@ run: kernel.bin
 
 .PHONY: clean
 clean:
-	$(RM) kernel.bin *.o
+	$(RM) kernel.bin *.o $(ASSEMBLIES)
 
 $(ASSEMBLIES): %.o : %.asm
 	$(NASM) -f elf32 -o $@ $<

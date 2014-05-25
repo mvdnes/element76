@@ -22,6 +22,7 @@ pub enum Color {
 pub static ROWS: uint = 25;
 pub static COLS: uint = 80;
 
+#[no_split_stack]
 pub fn putc(xpos: uint, ypos: uint, value: u8)
 {
 	if xpos >= COLS || ypos >= ROWS { return }
@@ -31,6 +32,7 @@ pub fn putc(xpos: uint, ypos: uint, value: u8)
 	}
 }
 
+#[no_split_stack]
 pub fn setfg(xpos: uint, ypos: uint, value: Color)
 {
 	if xpos >= COLS || ypos >= ROWS { return }
@@ -41,6 +43,7 @@ pub fn setfg(xpos: uint, ypos: uint, value: Color)
 	}
 }
 
+#[no_split_stack]
 pub fn setbg(xpos: uint, ypos: uint, value: Color)
 {
 	if xpos >= COLS || ypos >= ROWS { return }
@@ -51,6 +54,7 @@ pub fn setbg(xpos: uint, ypos: uint, value: Color)
 	}
 }
 
+#[no_split_stack]
 pub fn move_cursor(xpos: uint, ypos: uint)
 {
 	if xpos >= COLS || ypos >= COLS { return };

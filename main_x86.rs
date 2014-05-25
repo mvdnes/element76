@@ -5,7 +5,7 @@
 extern crate core;
 
 #[path = "arch/x86/"]
-mod platform {
+pub mod platform {
 	pub mod vga;
 	pub mod cpu;
 	mod io;
