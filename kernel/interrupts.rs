@@ -25,4 +25,5 @@ pub fn isr_handler(regs: Registers)
 	stdio::write_hex(10, 19, regs.eflags, Some(Black), Some(White));
 	stdio::write_hex(10, 20, regs.useresp, Some(Black), Some(White));
 	stdio::write_hex(10, 21, regs.ss, Some(Black), Some(White));
+	::platform::cpu::ack_irs();
 }

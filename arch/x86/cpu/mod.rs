@@ -20,6 +20,11 @@ pub struct Registers
 	pub ss: u32
 }
 
+pub fn ack_irs()
+{
+	unsafe { io::outport(0x20, 0x20); };
+}
+
 pub fn halt()
 {
 	unsafe { asm!("hlt"); };
@@ -27,9 +32,14 @@ pub fn halt()
 
 pub fn setup()
 {
-	remap_pic();
 	init_gdt();
+	remap_pic();
+	unsafe {
+	io::outport(0x21,0xFD); // Keyboard interrupts only
+	io::outport(0xA1,0xFF);
+	}
 	init_idt();
+	unsafe { asm!("sti") };
 }
 
 #[packed]
