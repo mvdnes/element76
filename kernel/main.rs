@@ -1,4 +1,3 @@
-use core::prelude::*;
 use platform::vga::{LightRed, Black};
 use kernel::stdio;
 
@@ -14,6 +13,9 @@ pub fn start()
 #[no_split_stack]
 fn main()
 {
-	stdio::clear_screen(LightRed);
-	stdio::write_screen(3, 3, " Hello, World! ", Some(Black), None);
+	stdio::set_bg(LightRed);
+	stdio::set_fg(Black);
+	stdio::clear_screen();
+	stdio::write_screen(3, 3, "Hello, World!");
+	stdio::move(0, 4);
 }
