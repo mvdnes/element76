@@ -20,6 +20,7 @@ pub fn handle_interrupt(regs: Registers, interrupt_number: u32, error_code: u32)
 	regs
 }
 
+#[no_split_stack]
 fn keyboard_irq()
 {
 	match keyboard::get_key()

@@ -26,6 +26,7 @@ pub fn halt()
 	unsafe { asm!("hlt"); };
 }
 
+#[no_split_stack]
 pub fn request_irq3()
 {
 	unsafe

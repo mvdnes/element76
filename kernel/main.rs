@@ -11,6 +11,7 @@ pub fn start()
 	loop { ::platform::cpu::halt(); }
 }
 
+#[no_split_stack]
 fn main()
 {
 	stdio::clear_screen(LightRed);

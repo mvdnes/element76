@@ -4,6 +4,7 @@ pub enum ArchKeyboardAction
 	ArchKeyUp(u8)
 }
 
+#[no_split_stack]
 pub fn get_key() -> ArchKeyboardAction
 {
 	let raw = unsafe { ::platform::io::inport(0x60) };
