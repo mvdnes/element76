@@ -4,12 +4,9 @@ use platform::keyboard::{ArchKeyUp, ArchKeyDown};
 pub enum KeyboardKey
 {
 	Printable(char, char),
-	Space,
 	Return,
 	Backspace,
 	Shift,
-	Control,
-	Alt,
 	Escape,
 	Tab,
 	Unknown(u8)
@@ -88,7 +85,7 @@ fn parse_keycode(code: u8) -> KeyboardKey
 		52 => Printable('.', '>'),
 		53 => Printable('/', '?'),
 		54 => Shift,
-		57 => Space,
+		57 => Printable(' ', ' '),
 		c => Unknown(c),
 	}
 }

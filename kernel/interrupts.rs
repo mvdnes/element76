@@ -30,7 +30,6 @@ fn keyboard_irq()
 		KeyDown(key) => match key
 		{
 			Printable(c, d) => { printer.print_char(if unsafe {shift == 0} {c} else {d}); },
-			Space => { printer.print_char(' '); },
 			Backspace => { printer.backspace(); },
 			Return => { printer.crlf(); },
 			Shift => unsafe { shift += 1; },
