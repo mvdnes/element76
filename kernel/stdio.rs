@@ -42,9 +42,68 @@ pub fn move(x: uint, y: uint)
 }
 
 #[no_split_stack]
-fn advance_coords()
+pub fn backspace()
 {
-	unsafe { move_coords(xpos + 1, ypos); };
+	go_left();
+	raw_print_char(' ' as u8);
+	set_cursor();
+}
+
+#[no_split_stack]
+pub fn crlf()
+{
+	unsafe
+	{
+		xpos = 0;
+		ypos = if ypos == ROWS - 1 { 0 } else { ypos + 1 };
+	}
+	set_cursor();
+}
+
+#[no_split_stack]
+fn go_right()
+{
+	let (mut x, mut y) = unsafe
+	{
+		(xpos, ypos)
+	};
+	if x == COLS - 1
+	{
+		x = 0;
+		y = if y == ROWS - 1 { 0 } else { y + 1 };
+	}
+	else
+	{
+		x += 1;
+	}
+	unsafe
+	{
+		xpos = x;
+		ypos = y;
+	}
+}
+
+#[no_split_stack]
+fn go_left()
+{
+	let (mut x, mut y) = unsafe
+	{
+		(xpos, ypos)
+	};
+	if x == 0
+	{
+		x = COLS - 1;
+		y = if y == 0 { ROWS - 1 } else { y - 1 };
+	}
+	else
+	{
+		x -= 1;
+	}
+	unsafe
+	{
+		xpos = x;
+		ypos = y;
+	}
 }
 
 #[no_split_stack]
@@ -90,7 +149,7 @@ pub fn print_bin(v: u32)
 			_ => '1',
 		} as u8;
 		raw_print_char(c);
-		advance_coords();
+		go_right();
 	}
 	set_cursor();
 }
@@ -115,7 +174,7 @@ pub fn print_hex(v: u32)
 			c => c + -10 + 'A' as u32,
 		} as u8;
 		raw_print_char(c);
-		advance_coords();
+		go_right();
 	}
 	set_cursor();
 }
@@ -131,7 +190,7 @@ pub fn write_char(x: uint, y: uint, value: char)
 pub fn print_char(value: char)
 {
 	raw_print_char(value as u8);
-	advance_coords();
+	go_right();
 	set_cursor();
 }
 
@@ -152,7 +211,7 @@ pub fn print_screen(value: &str)
 	for c in value.bytes()
 	{
 		raw_print_char(c);
-		advance_coords();
+		go_right();
 	}
 	set_cursor();
 }

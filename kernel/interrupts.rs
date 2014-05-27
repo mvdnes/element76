@@ -1,6 +1,6 @@
 use kernel::stdio;
 use kernel::keyboard;
-use kernel::keyboard::{KeyUp,KeyDown,Printable,Space,Escape};
+use kernel::keyboard::*;
 use platform::cpu::{Registers};
 use platform::vga::{Black, White,Yellow, LightRed};
 
@@ -28,6 +28,8 @@ fn keyboard_irq()
 		{
 			Printable(c) => { stdio::print_char(c); },
 			Space => { stdio::print_char(' '); },
+			Backspace => { stdio::backspace(); },
+			Return => { stdio::crlf(); },
 			_ => {},
 		},
 		_ => {},
