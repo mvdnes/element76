@@ -12,6 +12,7 @@ pub struct StdioWriter
 
 impl StdioWriter
 {
+	#[no_split_stack]
 	pub fn new() -> StdioWriter
 	{
 		StdioWriter

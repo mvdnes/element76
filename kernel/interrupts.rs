@@ -8,7 +8,6 @@ static mut shift: uint = 0;
 static mut irqprinter: StdioWriter = StdioWriter{ xpos: 0, ypos: 4, fg: Yellow, bg: LightRed };
 
 #[no_split_stack]
-#[no_mangle]
 pub fn handle_interrupt(regs: Registers, interrupt_number: u32, error_code: u32) -> Registers
 {
 	match interrupt_number
@@ -41,6 +40,7 @@ fn keyboard_irq()
 	unsafe { irqprinter = printer; };
 }
 
+#[no_split_stack]
 fn unknown_irq(interrupt_number: u32, error_code: u32)
 {
 	let mut printer = StdioWriter::new();
