@@ -26,7 +26,7 @@ fn keyboard_irq()
 	match keyboard::get_key()
 	{
 		KeyUp(Escape) => { ::platform::cpu::request_irq3(); },
-		KeyUp(Shift) => unsafe { shift -= 1 },
+		KeyUp(Shift) => unsafe { shift -= 1; },
 		KeyDown(key) => match key
 		{
 			Printable(c, d) => { stdio::print_char(if unsafe {shift == 0} {c} else {d}); },
@@ -34,6 +34,7 @@ fn keyboard_irq()
 			Backspace => { stdio::backspace(); },
 			Return => { stdio::crlf(); },
 			Shift => unsafe { shift += 1; },
+			Tab => { stdio::tab(); },
 			_ => {},
 		},
 		_ => {},

@@ -11,6 +11,7 @@ pub enum KeyboardKey
 	Control,
 	Alt,
 	Escape,
+	Tab,
 	Unknown(u8)
 }
 
@@ -49,6 +50,7 @@ fn parse_keycode(code: u8) -> KeyboardKey
 		12 => Printable('-', '_'),
 		13 => Printable('=', '+'),
 		14 => Backspace,
+		15 => Tab,
 		16 => Printable('q', 'Q'),
 		17 => Printable('w', 'W'),
 		18 => Printable('e', 'E'),

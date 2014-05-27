@@ -50,6 +50,18 @@ pub fn backspace()
 }
 
 #[no_split_stack]
+pub fn tab()
+{
+	let x = unsafe { xpos };
+	for _ in range(0, 4 - (x % 4))
+	{
+		raw_print_char(' ' as u8);
+		go_right();
+	}
+	set_cursor();
+}
+
+#[no_split_stack]
 pub fn crlf()
 {
 	unsafe
