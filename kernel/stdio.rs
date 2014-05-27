@@ -2,235 +2,182 @@ use core::prelude::*;
 use platform::vga::{Color, COLS, ROWS, Black, White};
 use platform::vga;
 
-static mut xpos: uint = 0;
-static mut ypos: uint = 0;
-static mut color_fg: Color = White;
-static mut color_bg: Color = Black;
-
-#[no_split_stack]
-pub fn clear_screen()
+pub struct StdioWriter
 {
-	let color = unsafe { color_bg };
-	for x in range(0u, COLS)
+	pub xpos: uint,
+	pub ypos: uint,
+	pub fg: Color,
+	pub bg: Color
+}
+
+impl StdioWriter
+{
+	pub fn new() -> StdioWriter
 	{
-		for y in range(0u, ROWS)
+		StdioWriter
 		{
-			vga::putc(x, y, 0);
-			vga::setbg(x, y, color);
+			xpos: 0,
+			ypos: 0,
+			fg: White,
+			bg: Black
 		}
 	}
-	move(0, 0);
-}
 
-#[no_split_stack]
-pub fn set_fg(color: Color)
-{
-	unsafe { color_fg = color; }
-}
-
-#[no_split_stack]
-pub fn set_bg(color: Color)
-{
-	unsafe { color_bg = color; }
-}
-
-#[no_split_stack]
-pub fn move(x: uint, y: uint)
-{
-	move_coords(x, y);
-	set_cursor();
-}
-
-#[no_split_stack]
-pub fn backspace()
-{
-	go_left();
-	raw_print_char(' ' as u8);
-	set_cursor();
-}
-
-#[no_split_stack]
-pub fn tab()
-{
-	let x = unsafe { xpos };
-	for _ in range(0, 4 - (x % 4))
+	#[no_split_stack]
+	pub fn clear_screen(&mut self)
 	{
-		raw_print_char(' ' as u8);
-		go_right();
-	}
-	set_cursor();
-}
-
-#[no_split_stack]
-pub fn crlf()
-{
-	unsafe
-	{
-		xpos = 0;
-		ypos = if ypos == ROWS - 1 { 0 } else { ypos + 1 };
-	}
-	set_cursor();
-}
-
-#[no_split_stack]
-fn go_right()
-{
-	let (mut x, mut y) = unsafe
-	{
-		(xpos, ypos)
-	};
-	if x == COLS - 1
-	{
-		x = 0;
-		y = if y == ROWS - 1 { 0 } else { y + 1 };
-	}
-	else
-	{
-		x += 1;
-	}
-	unsafe
-	{
-		xpos = x;
-		ypos = y;
-	}
-}
-
-#[no_split_stack]
-fn go_left()
-{
-	let (mut x, mut y) = unsafe
-	{
-		(xpos, ypos)
-	};
-	if x == 0
-	{
-		x = COLS - 1;
-		y = if y == 0 { ROWS - 1 } else { y - 1 };
-	}
-	else
-	{
-		x -= 1;
-	}
-	unsafe
-	{
-		xpos = x;
-		ypos = y;
-	}
-}
-
-#[no_split_stack]
-fn move_coords(x: uint, y: uint)
-{
-	let mut newx = x;
-	let mut newy = y;
-	if newx >= COLS { newx = 0; newy += 1; }
-	if newy >= ROWS { newy = 0; }
-	unsafe
-	{
-		xpos = newx;
-		ypos = newy;
-	}
-}
-
-#[no_split_stack]
-fn set_cursor()
-{
-	unsafe
-	{
-		vga::move_cursor(xpos, ypos);
-	}
-}
-
-#[no_split_stack]
-pub fn write_bin(x: uint, y: uint, v: u32)
-{
-	move_coords(x, y);
-	print_bin(v);
-}
-
-#[no_split_stack]
-pub fn print_bin(v: u32)
-{
-	print_screen("0b");
-
-	for i in range(0, 32)
-	{
-		let c = match (v >> (31-i)) & 0x1
+		for x in range(0u, COLS)
 		{
-			0 => '0',
-			_ => '1',
-		} as u8;
-		raw_print_char(c);
-		go_right();
+			for y in range(0u, ROWS)
+			{
+				vga::putc(x, y, 0);
+				vga::setfg(x, y, self.fg);
+				vga::setbg(x, y, self.bg);
+			}
+		}
+		self.move(0, 0);
 	}
-	set_cursor();
-}
 
-#[no_split_stack]
-pub fn write_hex(x: uint, y: uint, v: u32)
-{
-	move_coords(x, y);
-	print_hex(v);
-}
-
-#[no_split_stack]
-pub fn print_hex(v: u32)
-{
-	print_screen("0x");
-
-	for i in range(0, 8)
+	#[no_split_stack]
+	pub fn move(&mut self, x: uint, y: uint)
 	{
-		let c = match (v >> 4*(7-i)) & 0xF
+		self.move_coords(x, y);
+		self.set_cursor();
+	}
+
+	#[no_split_stack]
+	pub fn backspace(&mut self)
+	{
+		self.go_left();
+		self.raw_print_char(' ' as u8);
+		self.set_cursor();
+	}
+
+	#[no_split_stack]
+	pub fn tab(&mut self)
+	{
+		let x = self.xpos;
+		for _ in range(0, 4 - (x % 4))
 		{
-			c if c <= 9 => c + '0' as u32,
-			c => c + -10 + 'A' as u32,
-		} as u8;
-		raw_print_char(c);
-		go_right();
+			self.raw_print_char(' ' as u8);
+			self.go_right();
+		}
+		self.set_cursor();
 	}
-	set_cursor();
-}
 
-#[no_split_stack]
-pub fn write_char(x: uint, y: uint, value: char)
-{
-	move_coords(x, y);
-	print_char(value);
-}
-
-#[no_split_stack]
-pub fn print_char(value: char)
-{
-	raw_print_char(value as u8);
-	go_right();
-	set_cursor();
-}
-
-#[no_split_stack]
-fn raw_print_char(value: u8)
-{
-	unsafe
+	#[no_split_stack]
+	pub fn crlf(&mut self)
 	{
-		vga::putc(xpos, ypos, value as u8);
-		vga::setfg(xpos, ypos, color_fg);
-		vga::setbg(xpos, ypos, color_bg);
+		self.xpos = 0;
+		self.ypos = if self.ypos == ROWS - 1 { 0 } else { self.ypos + 1 };
+		self.set_cursor();
 	}
-}
 
-#[no_split_stack]
-pub fn print_screen(value: &str)
-{
-	for c in value.bytes()
+	#[no_split_stack]
+	fn go_right(&mut self)
 	{
-		raw_print_char(c);
-		go_right();
+		if self.xpos == COLS - 1
+		{
+			self.xpos = 0;
+			self.ypos = (self.ypos + ROWS + 1) % ROWS;
+		}
+		else
+		{
+			self.xpos += 1;
+		}
 	}
-	set_cursor();
-}
 
-#[no_split_stack]
-pub fn write_screen(x: uint, y: uint, value: &str)
-{
-	move_coords(x, y);
-	print_screen(value);
+	#[no_split_stack]
+	fn go_left(&mut self)
+	{
+		if self.xpos == 0
+		{
+			self.xpos = COLS - 1;
+			self.ypos = (self.ypos + ROWS - 1) % ROWS;
+		}
+		else
+		{
+			self.xpos -= 1;
+		}
+	}
+
+	#[no_split_stack]
+	fn move_coords(&mut self, x: uint, y: uint)
+	{
+		let mut newx = x;
+		let mut newy = y;
+		if newx >= COLS { newx = 0; newy += 1; }
+		if newy >= ROWS { newy = 0; }
+		self.xpos = newx;
+		self.ypos = newy;
+	}
+
+	#[no_split_stack]
+	fn set_cursor(&self)
+	{
+		vga::move_cursor(self.xpos, self.ypos);
+	}
+
+	#[no_split_stack]
+	pub fn print_bin(&mut self, v: u32)
+	{
+		self.print_screen("0b");
+
+		for i in range(0, 32)
+		{
+			let c = match (v >> (31-i)) & 0x1
+			{
+				0 => '0',
+				_ => '1',
+			} as u8;
+			self.raw_print_char(c);
+			self.go_right();
+		}
+		self.set_cursor();
+	}
+
+	#[no_split_stack]
+	pub fn print_hex(&mut self, v: u32)
+	{
+		self.print_screen("0x");
+
+		for i in range(0, 8)
+		{
+			let c = match (v >> 4*(7-i)) & 0xF
+			{
+				c if c <= 9 => c + '0' as u32,
+				c => c + -10 + 'A' as u32,
+			} as u8;
+			self.raw_print_char(c);
+			self.go_right();
+		}
+		self.set_cursor();
+	}
+
+	#[no_split_stack]
+	pub fn print_char(&mut self, value: char)
+	{
+		self.raw_print_char(value as u8);
+		self.go_right();
+		self.set_cursor();
+	}
+
+	#[no_split_stack]
+	fn raw_print_char(&self, value: u8)
+	{
+		vga::putc(self.xpos, self.ypos, value as u8);
+		vga::setfg(self.xpos, self.ypos, self.fg);
+		vga::setbg(self.xpos, self.ypos, self.bg);
+	}
+
+	#[no_split_stack]
+	pub fn print_screen(&mut self, value: &str)
+	{
+		for c in value.bytes()
+		{
+			self.raw_print_char(c);
+			self.go_right();
+		}
+		self.set_cursor();
+	}
 }

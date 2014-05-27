@@ -1,5 +1,5 @@
-use platform::vga::{LightRed, Black};
-use kernel::stdio;
+use platform::vga::{LightRed, Black, Yellow};
+use kernel::stdio::StdioWriter;
 
 #[no_mangle]
 #[no_split_stack]
@@ -13,9 +13,11 @@ pub fn start()
 #[no_split_stack]
 fn main()
 {
-	stdio::set_bg(LightRed);
-	stdio::set_fg(Black);
-	stdio::clear_screen();
-	stdio::write_screen(3, 3, "Hello, World!");
-	stdio::move(0, 4);
+	let mut printer = StdioWriter::new();
+	printer.bg = LightRed;
+	printer.fg = Yellow;
+	printer.clear_screen();
+	printer.fg = Black;
+	printer.move(3, 3);
+	printer.print_screen("Hello, World!");
 }

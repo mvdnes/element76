@@ -1,10 +1,11 @@
-use kernel::stdio;
+use kernel::stdio::StdioWriter;
 use kernel::keyboard;
 use kernel::keyboard::*;
 use platform::cpu::{Registers};
 use platform::vga::{Black, White,Yellow, LightRed};
 
 static mut shift: uint = 0;
+static mut irqprinter: StdioWriter = StdioWriter{ xpos: 0, ypos: 4, fg: Yellow, bg: LightRed };
 
 #[no_split_stack]
 #[no_mangle]
@@ -21,31 +22,35 @@ pub fn handle_interrupt(regs: Registers, interrupt_number: u32, error_code: u32)
 #[no_split_stack]
 fn keyboard_irq()
 {
-	stdio::set_fg(Yellow);
-	stdio::set_bg(LightRed);
+	let mut printer = unsafe { irqprinter };
 	match keyboard::get_key()
 	{
 		KeyUp(Escape) => { ::platform::cpu::request_irq3(); },
 		KeyUp(Shift) => unsafe { shift -= 1; },
 		KeyDown(key) => match key
 		{
-			Printable(c, d) => { stdio::print_char(if unsafe {shift == 0} {c} else {d}); },
-			Space => { stdio::print_char(' '); },
-			Backspace => { stdio::backspace(); },
-			Return => { stdio::crlf(); },
+			Printable(c, d) => { printer.print_char(if unsafe {shift == 0} {c} else {d}); },
+			Space => { printer.print_char(' '); },
+			Backspace => { printer.backspace(); },
+			Return => { printer.crlf(); },
 			Shift => unsafe { shift += 1; },
-			Tab => { stdio::tab(); },
+			Tab => { printer.tab(); },
 			_ => {},
 		},
 		_ => {},
 	};
+	unsafe { irqprinter = printer; };
 }
 
 fn unknown_irq(interrupt_number: u32, error_code: u32)
 {
-	stdio::set_fg(White); stdio::set_bg(Black);
-	stdio::write_screen(10, 5, "Interrupt received");
-	stdio::set_fg(Black); stdio::set_bg(White);
-	stdio::write_hex(10, 6, interrupt_number as u32);
-	stdio::write_bin(10, 7, error_code as u32);
+	let mut printer = StdioWriter::new();
+	printer.fg = White; printer.bg = Black;
+	printer.move(10, 5);
+	printer.print_screen("Interrupt received");
+	printer.fg = Black; printer.bg = White;
+	printer.move(10, 6);
+	printer.print_hex(interrupt_number as u32);
+	printer.move(10, 7);
+	printer.print_bin(error_code as u32);
 }
