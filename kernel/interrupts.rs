@@ -4,6 +4,8 @@ use kernel::keyboard::*;
 use platform::cpu::{Registers};
 use platform::vga::{Black, White,Yellow, LightRed};
 
+static mut shift: bool = false;
+
 #[no_split_stack]
 #[no_mangle]
 pub fn handle_interrupt(regs: Registers, interrupt_number: u32, error_code: u32) -> Registers
@@ -24,12 +26,14 @@ fn keyboard_irq()
 	match keyboard::get_key()
 	{
 		KeyUp(Escape) => { ::platform::cpu::request_irq3(); },
+		KeyUp(Shift) => unsafe { shift = false },
 		KeyDown(key) => match key
 		{
-			Printable(c) => { stdio::print_char(c); },
+			Printable(c, d) => { stdio::print_char(if unsafe {!shift} {c} else {d}); },
 			Space => { stdio::print_char(' '); },
 			Backspace => { stdio::backspace(); },
 			Return => { stdio::crlf(); },
+			Shift => unsafe { shift = true; },
 			_ => {},
 		},
 		_ => {},
