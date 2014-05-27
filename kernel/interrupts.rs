@@ -33,6 +33,7 @@ fn keyboard_irq()
 			Return => { printer.crlf(); },
 			Shift => unsafe { shift += 1; },
 			Tab => { printer.tab(); },
+			Unknown(c) => { printer.print_hex(c as uint, 8); printer.print_char(' '); },
 			_ => {},
 		},
 		_ => {},
@@ -49,7 +50,7 @@ fn unknown_irq(interrupt_number: u32, error_code: u32)
 	printer.print_screen("Interrupt received");
 	printer.fg = Black; printer.bg = White;
 	printer.move(10, 6);
-	printer.print_hex(interrupt_number as u32);
+	printer.print_hex(interrupt_number as uint, 32);
 	printer.move(10, 7);
-	printer.print_bin(error_code as u32);
+	printer.print_bin(error_code as uint, 32);
 }

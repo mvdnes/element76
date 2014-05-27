@@ -1,4 +1,5 @@
 use core::prelude::*;
+use core::iter::range_step;
 use platform::vga::{Color, COLS, ROWS, Black, White};
 use platform::vga;
 
@@ -120,13 +121,13 @@ impl StdioWriter
 	}
 
 	#[no_split_stack]
-	pub fn print_bin(&mut self, v: u32)
+	pub fn print_bin(&mut self, v: uint, sz: uint)
 	{
 		self.print_screen("0b");
 
-		for i in range(0, 32)
+		for i in range_step(sz as int, 0i, -1)
 		{
-			let c = match (v >> (31-i)) & 0x1
+			let c = match (v >> (i-1)) & 0x1
 			{
 				0 => '0',
 				_ => '1',
@@ -138,16 +139,16 @@ impl StdioWriter
 	}
 
 	#[no_split_stack]
-	pub fn print_hex(&mut self, v: u32)
+	pub fn print_hex(&mut self, v: uint, sz: uint)
 	{
 		self.print_screen("0x");
 
-		for i in range(0, 8)
+		for i in range_step(sz as int, 0i, -4)
 		{
-			let c = match (v >> 4*(7-i)) & 0xF
+			let c = match (v >> (i-4)) & 0xF
 			{
-				c if c <= 9 => c + '0' as u32,
-				c => c + -10 + 'A' as u32,
+				c if c <= 9 => c + '0' as uint,
+				c => c + -10 + 'A' as uint,
 			} as u8;
 			self.raw_print_char(c);
 			self.go_right();
