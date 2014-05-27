@@ -4,7 +4,7 @@ use kernel::keyboard::*;
 use platform::cpu::{Registers};
 use platform::vga::{Black, White,Yellow, LightRed};
 
-static mut shift: bool = false;
+static mut shift: uint = 0;
 
 #[no_split_stack]
 #[no_mangle]
@@ -26,14 +26,14 @@ fn keyboard_irq()
 	match keyboard::get_key()
 	{
 		KeyUp(Escape) => { ::platform::cpu::request_irq3(); },
-		KeyUp(Shift) => unsafe { shift = false },
+		KeyUp(Shift) => unsafe { shift -= 1 },
 		KeyDown(key) => match key
 		{
-			Printable(c, d) => { stdio::print_char(if unsafe {!shift} {c} else {d}); },
+			Printable(c, d) => { stdio::print_char(if unsafe {shift == 0} {c} else {d}); },
 			Space => { stdio::print_char(' '); },
 			Backspace => { stdio::backspace(); },
 			Return => { stdio::crlf(); },
-			Shift => unsafe { shift = true; },
+			Shift => unsafe { shift += 1; },
 			_ => {},
 		},
 		_ => {},
