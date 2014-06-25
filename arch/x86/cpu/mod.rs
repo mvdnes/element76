@@ -303,9 +303,12 @@ pub fn isr_handler(ds: u32, edi:u32, esi:u32, ebp:u32, esp:u32, ebx:u32, edx:u32
 	::kernel::interrupts::handle_interrupt(regs, ino, ec);
 
 	// Ack IRQ
-	unsafe { io::outport(0x20, 0x20); };
-	if ino >= 40
+	if ino >= 32
 	{
-		unsafe { io::outport(0xa0,0x20); };
+		unsafe { io::outport(0x20, 0x20); };
+		if ino >= 40
+		{
+			unsafe { io::outport(0xa0,0x20); };
+		}
 	}
 }
