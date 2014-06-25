@@ -11,7 +11,7 @@ pub fn keyboard_irq()
 	let mut printer = unsafe { irqprinter };
 	match ::kernel::keyboard::get_key()
 	{
-		KeyUp(Escape) => { ::platform::cpu::request_irq3(); },
+		KeyUp(Escape) => { ::platform::cpu::request_int3(); },
 		KeyUp(Shift) => unsafe { shift -= 1; },
 		KeyDown(key) => match key
 		{

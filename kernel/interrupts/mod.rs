@@ -9,7 +9,7 @@ pub fn handle_interrupt(regs: Registers, interrupt_number: u32, error_code: u32)
 {
 	match interrupt_number
 	{
-		1 => keyboard::keyboard_irq(),
+		0x21 => keyboard::keyboard_irq(),
 		_ => unknown_irq(interrupt_number, error_code),
 	};
 	regs

@@ -27,11 +27,11 @@ pub fn halt()
 }
 
 #[no_split_stack]
-pub fn request_irq3()
+pub fn request_int3()
 {
 	unsafe
 	{
-		asm!("int $$0x23");
+		asm!("int $$0x03");
 	}
 }
 
@@ -119,6 +119,22 @@ extern
 	fn isr29();
 	fn isr30();
 	fn isr31();
+	fn irq0 ();
+	fn irq1();
+	fn irq2();
+	fn irq3();
+	fn irq4();
+	fn irq5();
+	fn irq6();
+	fn irq7();
+	fn irq8();
+	fn irq9();
+	fn irq10();
+	fn irq11();
+	fn irq12();
+	fn irq13();
+	fn irq14();
+	fn irq15();
 }
 
 static GDT_COUNT: uint = 5;
@@ -230,15 +246,30 @@ fn init_idt()
 		idt_set_gate(29, isr29 as u32, 0x08, 0x8E);
 		idt_set_gate(30, isr30 as u32, 0x08, 0x8E);
 		idt_set_gate(31, isr31 as u32, 0x08, 0x8E);
+		idt_set_gate(32, irq0 as u32, 0x08, 0x8E);
+		idt_set_gate(33, irq1 as u32, 0x08, 0x8E);
+		idt_set_gate(34, irq2 as u32, 0x08, 0x8E);
+		idt_set_gate(35, irq3 as u32, 0x08, 0x8E);
+		idt_set_gate(36, irq4 as u32, 0x08, 0x8E);
+		idt_set_gate(37, irq5 as u32, 0x08, 0x8E);
+		idt_set_gate(38, irq6 as u32, 0x08, 0x8E);
+		idt_set_gate(39, irq7 as u32, 0x08, 0x8E);
+		idt_set_gate(40, irq8 as u32, 0x08, 0x8E);
+		idt_set_gate(41, irq9 as u32, 0x08, 0x8E);
+		idt_set_gate(42, irq10 as u32, 0x08, 0x8E);
+		idt_set_gate(43, irq11 as u32, 0x08, 0x8E);
+		idt_set_gate(44, irq12 as u32, 0x08, 0x8E);
+		idt_set_gate(45, irq13 as u32, 0x08, 0x8E);
+		idt_set_gate(46, irq14 as u32, 0x08, 0x8E);
+		idt_set_gate(47, irq15 as u32, 0x08, 0x8E);
 
 		idt_flush(&idt_ptr as *IDTPointer as u32);
 	}
 }
 
 #[no_split_stack]
-unsafe fn idt_set_gate(m: uint, base: u32, sel: u16, flags: u8)
+unsafe fn idt_set_gate(n: uint, base: u32, sel: u16, flags: u8)
 {
-	let n = m + IRQ_OFFSET;
 	idt_entries[n].base_low = (base & 0xFFFF) as u16;
 	idt_entries[n].base_high = ((base >> 16) & 0xFFFF) as u16;
 
@@ -273,7 +304,7 @@ pub fn isr_handler(ds: u32, edi:u32, esi:u32, ebp:u32, esp:u32, ebx:u32, edx:u32
 
 	// Ack IRQ
 	unsafe { io::outport(0x20, 0x20); };
-	if ino >= 8
+	if ino >= 40
 	{
 		unsafe { io::outport(0xa0,0x20); };
 	}
