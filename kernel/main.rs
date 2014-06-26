@@ -1,5 +1,6 @@
 use platform::vga::{Red, White, Yellow, Black};
 use kernel::stdio::StdioWriter;
+use core::fmt::FormatWriter;
 
 #[no_mangle]
 pub fn entry()
@@ -21,15 +22,21 @@ fn main()
 }
 
 #[lang = "begin_unwind"]
-extern fn begin_unwind(_args: &::core::fmt::Arguments, file: &str, line: uint) -> !
+extern fn begin_unwind(args: &::core::fmt::Arguments, file: &str, line: uint) -> !
 {
 	let mut printer = StdioWriter::new();
 	printer.bg = Black;
 	printer.fg = Red;
+
 	printer.print_screen("RUST FAIL");
 	printer.crlf();
+
+	let _ = printer.write_fmt(args);
+	printer.crlf();
+
 	printer.print_screen(file);
 	printer.print_char(':');
 	printer.print_dec(line);
+
 	::platform::cpu::halt();
 }
