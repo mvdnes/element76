@@ -1,6 +1,7 @@
 mod gdt;
 mod idt;
 mod pic;
+mod timer;
 
 static IRQ_OFFSET: u8 = 0x20;
 
@@ -33,7 +34,7 @@ pub fn request_int3()
 	{
 		asm!("int $$0x03");
 	}
-	pic::disable_irq(1);
+	pic::disable_irq(0);
 }
 
 pub fn setup()
@@ -41,6 +42,7 @@ pub fn setup()
 	gdt::init_gdt();
 	pic::remap_pic(IRQ_OFFSET);
 	idt::init_idt();
+	timer::set_interval(50);
 	enable_interrupts();
 }
 
@@ -77,6 +79,7 @@ pub fn isr_handler(ds: u32, edi:u32, esi:u32, ebp:u32, esp:u32, ebx:u32, edx:u32
 
 fn enable_interrupts()
 {
+	pic::enable_irq(0);
 	pic::enable_irq(1);
 	unsafe
 	{

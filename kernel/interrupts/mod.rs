@@ -2,6 +2,7 @@ use kernel::stdio::StdioWriter;
 use platform::cpu::Registers;
 use platform::vga::{Black, White};
 
+mod timer;
 mod keyboard;
 
 #[no_split_stack]
@@ -9,6 +10,7 @@ pub fn handle_interrupt(regs: Registers, interrupt_number: u32, error_code: u32)
 {
 	match interrupt_number
 	{
+		0x20 => timer::handle_irq(),
 		0x21 => keyboard::keyboard_irq(),
 		_ => unknown_irq(interrupt_number, error_code),
 	};
