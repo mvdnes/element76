@@ -1,7 +1,7 @@
 ;;init.asm
 use32
 
-section .text
+section .multiboot
     ;multiboot spec
     align 4
     dd 0x1BADB002            ;magic

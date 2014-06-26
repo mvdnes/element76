@@ -7,6 +7,7 @@ KERNEL_DEPENDENCIES=$(wildcard kernel/*.rs)
 KERNEL_DEPENDENCIES=$(wildcard kernel/*/*.rs)
 RUST_DEPENDENCIES=$(ARCH_DEPENDENCIES) $(KERNEL_DEPENDENCIES)
 ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard arch/x86/asm/*.asm))
+TARGET=i686-unknown-linux-gnu
 
 all: kernel.bin
 
@@ -16,13 +17,14 @@ run: kernel.bin
 
 .PHONY: clean
 clean:
-	$(RM) kernel.bin *.o $(ASSEMBLIES)
+	$(RM) kernel.bin *.o $(ASSEMBLIES) main.a
 
 $(ASSEMBLIES): %.o : %.asm
 	$(NASM) -f elf32 -o $@ $<
 
-main.o: main_x86.rs $(RUST_DEPENDENCIES)
-	$(RUSTC) -L. -O --target i386-unknown-linux --crate-type lib -o $@ --emit obj $<
 
-kernel.bin: main.o $(ASSEMBLIES)
-	$(LD) -m elf_i386 -T link.ld -o $@ $^
+main.a: main_x86.rs $(RUST_DEPENDENCIES)
+	$(RUSTC) -O -L rustlibdir --target $(TARGET) $< -o $@
+
+kernel.bin: $(ASSEMBLIES) main.a
+	$(LD) --gc-sections -m elf_i386 -e _start -T link.ld -o $@ $^
