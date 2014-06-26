@@ -23,9 +23,5 @@ pub mod kernel {
 	mod keyboard;
 }
 
-#[lang = "begin_unwind"]
-extern fn begin_unwind(_args: &core::fmt::Arguments, _file: &str, _line: uint) -> ! {
-	loop {}
-}
 #[lang = "stack_exhausted"] extern fn stack_exhausted() {}
 #[lang = "eh_personality"] extern fn eh_personality() {}

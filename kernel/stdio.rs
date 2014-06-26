@@ -110,6 +110,30 @@ impl StdioWriter
 		vga::move_cursor(self.xpos, self.ypos);
 	}
 
+	pub fn print_dec(&mut self, v: uint)
+	{
+		if v == 0
+		{
+			self.print_char('0');
+			return;
+		}
+
+		let mut fac = 1;
+		let mut nv = v;
+		while fac <= v { fac *= 10; }
+		fac /= 10;
+		while fac > 0
+		{
+			let n = nv / fac;
+			let c = n as u8 + '0' as u8;
+			self.raw_print_char(c);
+			self.go_right();
+			nv -= n * fac;
+			fac /= 10;
+		}
+		self.set_cursor();
+	}
+
 	pub fn print_bin(&mut self, v: uint, sz: uint)
 	{
 		self.print_screen("0b");

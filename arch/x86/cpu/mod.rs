@@ -5,9 +5,24 @@ mod timer;
 
 static IRQ_OFFSET: u8 = 0x20;
 
+pub fn idle()
+{
+	unsafe
+	{
+		asm!("hlt");
+	}
+}
+
 pub fn halt()
 {
-	unsafe { asm!("hlt"); };
+	loop
+	{
+		unsafe
+		{
+			asm!("cli");
+			asm!("hlt");
+		}
+	}
 }
 
 pub fn request_int3()
