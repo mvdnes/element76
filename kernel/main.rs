@@ -3,7 +3,7 @@ use kernel::stdio::StdioWriter;
 use core::fmt::FormatWriter;
 
 #[no_mangle]
-pub fn entry()
+pub fn entry() -> !
 {
 	::platform::cpu::setup();
 	main();
