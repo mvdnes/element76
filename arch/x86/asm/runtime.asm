@@ -5,8 +5,6 @@ __morestack:
 	hlt
 	jmp __morestack
 
-extern start
-
 ; Allocate a 16KiB stack
 section .bootstrap_stack
 align 4
@@ -14,23 +12,25 @@ stack_bottom:
 times 16384 db 0
 stack_top:
 
+extern entry
+
 ; Entry point
 section .text
-global _start
-_start:
+global start
+start:
 	cli
 	; Set up the stack
 	mov esp, stack_top
 	; Make everything play nice with segmented stacks - see __morestack below
 	mov [gs:0x30], dword 0
-	call start
-.halt:
+	call entry
+	jmp hang
+
+global abort
+abort:
+	jmp hang
+
+hang:
 	cli
 	hlt
-	jmp .halt
-
-;global abort
-;abort:
-;	cli
-;	hlt
-;	jmp abort
+	jmp hang

@@ -26,4 +26,4 @@ main.a: main_x86.rs $(RUST_DEPENDENCIES)
 	$(RUSTC) -O -L rustlibdir --target $(TARGET) $< -o $@
 
 kernel.bin: $(ASSEMBLIES) main.a
-	$(LD) --gc-sections -m elf_i386 -e _start -T link.ld -o $@ $^
+	$(LD) --gc-sections -m elf_i386 -T link.ld -o $@ $^

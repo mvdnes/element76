@@ -2,7 +2,7 @@ use platform::vga::{LightRed, Black, Yellow};
 use kernel::stdio::StdioWriter;
 
 #[no_mangle]
-pub fn start()
+pub fn entry()
 {
 	::platform::cpu::setup();
 	main();
