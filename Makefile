@@ -7,23 +7,25 @@ KERNEL_DEPENDENCIES=$(wildcard kernel/*.rs) $(wildcard kernel/*/*.rs)
 RUST_DEPENDENCIES=$(ARCH_DEPENDENCIES) $(KERNEL_DEPENDENCIES)
 ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard arch/x86/asm/*.asm))
 TARGET=i686-unknown-linux-gnu
+RUSTLIB=bin/main.a
+BINARY=bin/kernel.bin
 
-all: kernel.bin
+all: $(BINARY)
 
 .PHONY: run
-run: kernel.bin
+run: $(BINARY)
 	qemu-system-i386 -kernel $<
 
 .PHONY: clean
 clean:
-	$(RM) kernel.bin *.o $(ASSEMBLIES) main.a
+	$(RM) $(BINARY) *.o $(ASSEMBLIES) $(RUSTLIB)
 
 $(ASSEMBLIES): %.o : %.asm
 	$(NASM) -f elf32 -o $@ $<
 
 
-main.a: main_x86.rs $(RUST_DEPENDENCIES)
+$(RUSTLIB): main_x86.rs $(RUST_DEPENDENCIES)
 	$(RUSTC) -O -L rustlibdir --target $(TARGET) $< -o $@
 
-kernel.bin: $(ASSEMBLIES) main.a
+$(BINARY): $(ASSEMBLIES) $(RUSTLIB)
 	$(LD) --gc-sections -m elf_i386 -T link.ld -o $@ $^
