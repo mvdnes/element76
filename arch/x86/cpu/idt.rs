@@ -25,7 +25,6 @@ struct IDTPointer
 	base: u32
 }
 
-#[no_split_stack]
 pub fn init_idt()
 {
 	unsafe
@@ -86,7 +85,6 @@ pub fn init_idt()
 	}
 }
 
-#[no_split_stack]
 unsafe fn idt_set_gate(n: uint, base: u32, sel: u16, flags: u8)
 {
 	idt_entries[n].base_low = (base & 0xFFFF) as u16;

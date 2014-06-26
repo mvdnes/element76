@@ -22,13 +22,11 @@ pub struct Registers
 	pub ss: u32
 }
 
-#[no_split_stack]
 pub fn halt()
 {
 	unsafe { asm!("hlt"); };
 }
 
-#[no_split_stack]
 pub fn request_int3()
 {
 	unsafe
@@ -38,7 +36,6 @@ pub fn request_int3()
 	pic::disable_irq(1);
 }
 
-#[no_split_stack]
 pub fn setup()
 {
 	gdt::init_gdt();
@@ -49,7 +46,6 @@ pub fn setup()
 
 
 #[no_mangle]
-#[no_split_stack]
 pub fn isr_handler(ds: u32, edi:u32, esi:u32, ebp:u32, esp:u32, ebx:u32, edx:u32, ecx:u32, eax:u32, ino: u32, ec:u32, eip:u32, cs:u32, eflags:u32,useresp:u32,ss:u32)
 {
 	let regs = Registers

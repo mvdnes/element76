@@ -9,7 +9,6 @@ static IRQ_ACK: u8 = 0x20;
 static ICW1: u8 = 0x11;
 static ICW4: u8 = 0x01;
 
-#[no_split_stack]
 pub fn remap_pic(offset: u8)
 {
 	unsafe
@@ -44,7 +43,6 @@ pub fn remap_pic(offset: u8)
 	}
 }
 
-#[no_split_stack]
 pub fn enable_irq(irq: uint)
 {
 	let (port, line) = if irq < 8
@@ -63,7 +61,6 @@ pub fn enable_irq(irq: uint)
 	}
 }
 
-#[no_split_stack]
 pub fn disable_irq(irq: uint)
 {
 	let (port, line) = if irq < 8
@@ -82,7 +79,6 @@ pub fn disable_irq(irq: uint)
 	}
 }
 
-#[no_split_stack]
 pub fn acknowledge_irq(irq: u8)
 {
 	if irq >= 8

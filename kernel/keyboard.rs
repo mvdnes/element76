@@ -18,7 +18,6 @@ pub enum KeyboardAction
 	KeyDown(KeyboardKey),
 }
 
-#[no_split_stack]
 pub fn get_key() -> KeyboardAction
 {
 	match keyboard::get_key()
@@ -28,7 +27,6 @@ pub fn get_key() -> KeyboardAction
 	}
 }
 
-#[no_split_stack]
 fn parse_keycode(code: u8) -> KeyboardKey
 {
 	match code

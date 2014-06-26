@@ -2,7 +2,6 @@ use platform::vga::{LightRed, Black, Yellow};
 use kernel::stdio::StdioWriter;
 
 #[no_mangle]
-#[no_split_stack]
 pub fn start()
 {
 	::platform::cpu::setup();
@@ -10,7 +9,6 @@ pub fn start()
 	loop { ::platform::cpu::halt(); }
 }
 
-#[no_split_stack]
 fn main()
 {
 	let mut printer = StdioWriter::new();

@@ -26,7 +26,6 @@ struct GDTPointer
 	base: u32
 }
 
-#[no_split_stack]
 pub fn init_gdt()
 {
 	unsafe
@@ -44,7 +43,6 @@ pub fn init_gdt()
 	};
 }
 
-#[no_split_stack]
 unsafe fn gdt_set_gate(n: uint, base: u32, limit: u32, access: u8, gran: u8)
 {
 	gdt_entries[n].base_low = (base & 0xFFFF) as u16;

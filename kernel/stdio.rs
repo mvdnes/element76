@@ -13,7 +13,6 @@ pub struct StdioWriter
 
 impl StdioWriter
 {
-	#[no_split_stack]
 	pub fn new() -> StdioWriter
 	{
 		StdioWriter
@@ -25,7 +24,6 @@ impl StdioWriter
 		}
 	}
 
-	#[no_split_stack]
 	pub fn clear_screen(&mut self)
 	{
 		for x in range(0u, COLS)
@@ -40,14 +38,12 @@ impl StdioWriter
 		self.move(0, 0);
 	}
 
-	#[no_split_stack]
 	pub fn move(&mut self, x: uint, y: uint)
 	{
 		self.move_coords(x, y);
 		self.set_cursor();
 	}
 
-	#[no_split_stack]
 	pub fn backspace(&mut self)
 	{
 		self.go_left();
@@ -55,7 +51,6 @@ impl StdioWriter
 		self.set_cursor();
 	}
 
-	#[no_split_stack]
 	pub fn tab(&mut self)
 	{
 		let x = self.xpos;
@@ -67,7 +62,6 @@ impl StdioWriter
 		self.set_cursor();
 	}
 
-	#[no_split_stack]
 	pub fn crlf(&mut self)
 	{
 		self.xpos = 0;
@@ -75,7 +69,6 @@ impl StdioWriter
 		self.set_cursor();
 	}
 
-	#[no_split_stack]
 	fn go_right(&mut self)
 	{
 		if self.xpos == COLS - 1
@@ -89,7 +82,6 @@ impl StdioWriter
 		}
 	}
 
-	#[no_split_stack]
 	fn go_left(&mut self)
 	{
 		if self.xpos == 0
@@ -103,7 +95,6 @@ impl StdioWriter
 		}
 	}
 
-	#[no_split_stack]
 	fn move_coords(&mut self, x: uint, y: uint)
 	{
 		let mut newx = x;
@@ -114,13 +105,11 @@ impl StdioWriter
 		self.ypos = newy;
 	}
 
-	#[no_split_stack]
 	fn set_cursor(&self)
 	{
 		vga::move_cursor(self.xpos, self.ypos);
 	}
 
-	#[no_split_stack]
 	pub fn print_bin(&mut self, v: uint, sz: uint)
 	{
 		self.print_screen("0b");
@@ -138,7 +127,6 @@ impl StdioWriter
 		self.set_cursor();
 	}
 
-	#[no_split_stack]
 	pub fn print_hex(&mut self, v: uint, sz: uint)
 	{
 		self.print_screen("0x");
@@ -156,7 +144,6 @@ impl StdioWriter
 		self.set_cursor();
 	}
 
-	#[no_split_stack]
 	pub fn print_char(&mut self, value: char)
 	{
 		self.raw_print_char(value as u8);
@@ -164,7 +151,6 @@ impl StdioWriter
 		self.set_cursor();
 	}
 
-	#[no_split_stack]
 	fn raw_print_char(&self, value: u8)
 	{
 		vga::putc(self.xpos, self.ypos, value as u8);
@@ -172,7 +158,6 @@ impl StdioWriter
 		vga::setbg(self.xpos, self.ypos, self.bg);
 	}
 
-	#[no_split_stack]
 	pub fn print_screen(&mut self, value: &str)
 	{
 		for c in value.bytes()
