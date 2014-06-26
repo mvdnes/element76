@@ -1,10 +1,7 @@
-#![allow(ctypes)]
-#![feature(globs)]
-#![crate_type="staticlib"]
-#![no_std]
-#![feature(asm)]
-#![feature(lang_items)]
 #![crate_id = "main"]
+#![crate_type = "staticlib"]
+#![no_std]
+#![feature(globs, asm, lang_items)]
 
 extern crate core;
 
