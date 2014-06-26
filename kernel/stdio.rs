@@ -1,5 +1,5 @@
 use core::prelude::*;
-use core::iter::range_step;
+use core::iter::range_step_inclusive;
 use platform::vga::{Color, COLS, ROWS, Black, White};
 use platform::vga;
 
@@ -138,9 +138,9 @@ impl StdioWriter
 	{
 		self.print_screen("0b");
 
-		for i in range_step(sz as int, 0i, -1)
+		for i in range_step_inclusive(sz as int - 1, 0, -1)
 		{
-			let c = match (v >> (i-1)) & 0x1
+			let c = match (v >> (i as uint)) & 0x1
 			{
 				0 => '0',
 				_ => '1',
@@ -155,9 +155,9 @@ impl StdioWriter
 	{
 		self.print_screen("0x");
 
-		for i in range_step(sz as int, 0i, -4)
+		for i in range_step_inclusive(sz as int - 4, 0i, -4)
 		{
-			let c = match (v >> (i-4)) & 0xF
+			let c = match (v >> (i as uint)) & 0xF
 			{
 				c if c <= 9 => c + '0' as uint,
 				c => c + -10 + 'A' as uint,
