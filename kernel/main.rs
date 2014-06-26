@@ -32,5 +32,4 @@ extern fn begin_unwind(_args: &::core::fmt::Arguments, file: &str, line: uint) -
 	printer.print_char(':');
 	printer.print_dec(line);
 	::platform::cpu::halt();
-	loop {}
 }

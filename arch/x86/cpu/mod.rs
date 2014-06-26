@@ -13,7 +13,7 @@ pub fn idle()
 	}
 }
 
-pub fn halt()
+pub fn halt() -> !
 {
 	loop
 	{
