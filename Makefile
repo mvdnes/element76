@@ -3,8 +3,7 @@ NASM?=nasm
 LD?=ld
 
 ARCH_DEPENDENCIES=$(wildcard arch/x86/*/*.rs)
-KERNEL_DEPENDENCIES=$(wildcard kernel/*.rs)
-KERNEL_DEPENDENCIES=$(wildcard kernel/*/*.rs)
+KERNEL_DEPENDENCIES=$(wildcard kernel/*.rs) $(wildcard kernel/*/*.rs)
 RUST_DEPENDENCIES=$(ARCH_DEPENDENCIES) $(KERNEL_DEPENDENCIES)
 ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard arch/x86/asm/*.asm))
 TARGET=i686-unknown-linux-gnu
