@@ -30,7 +30,7 @@ pub fn init_idt()
 	unsafe
 	{
 		idt_ptr.limit = (::core::mem::size_of::<IDTEntry>() * IDT_COUNT - 1) as u16;
-		idt_ptr.base = &idt_entries as *[IDTEntry,.. IDT_COUNT] as u32;
+		idt_ptr.base = &idt_entries as *const [IDTEntry,.. IDT_COUNT] as u32;
 
 		idt_set_gate( 0, isr0  as u32, 0x08, 0x8E);
 		idt_set_gate( 1, isr1  as u32, 0x08, 0x8E);
@@ -81,7 +81,7 @@ pub fn init_idt()
 		idt_set_gate(46, irq14 as u32, 0x08, 0x8E);
 		idt_set_gate(47, irq15 as u32, 0x08, 0x8E);
 
-		idt_flush(&idt_ptr as *IDTPointer as u32);
+		idt_flush(&idt_ptr as *const IDTPointer as u32);
 	}
 }
 

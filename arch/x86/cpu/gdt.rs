@@ -31,7 +31,7 @@ pub fn init_gdt()
 	unsafe
 	{
 		gdt_ptr.limit = (::core::mem::size_of::<GDTEntry>() * GDT_COUNT - 1) as u16;
-		gdt_ptr.base = &gdt_entries as *[GDTEntry,.. GDT_COUNT] as u32;
+		gdt_ptr.base = &gdt_entries as *const [GDTEntry,.. GDT_COUNT] as u32;
 
 		gdt_set_gate(0, 0, 0, 0, 0);
 		gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
@@ -39,7 +39,7 @@ pub fn init_gdt()
 		gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
 		gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 
-		gdt_flush(&gdt_ptr as *GDTPointer as u32);
+		gdt_flush(&gdt_ptr as *const GDTPointer as u32);
 	};
 }
 
