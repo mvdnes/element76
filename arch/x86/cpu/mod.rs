@@ -40,7 +40,6 @@ pub fn setup()
 	pic::remap_pic(IRQ_OFFSET);
 	idt::init_idt();
 	timer::set_interval(50);
-	enable_interrupts();
 }
 
 
@@ -56,7 +55,7 @@ pub fn isr_handler(_ds: u32, _edi:u32, _esi:u32, _ebp:u32, _esp:u32, _ebx:u32, _
 	}
 }
 
-fn enable_interrupts()
+pub fn enable_interrupts()
 {
 	pic::enable_irq(0);
 	pic::enable_irq(1);

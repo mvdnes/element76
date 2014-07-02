@@ -6,6 +6,8 @@ use core::fmt::FormatWriter;
 pub fn entry() -> !
 {
 	::platform::cpu::setup();
+	::platform::mmu::setup();
+	::platform::cpu::enable_interrupts();
 	main();
 	loop { ::platform::cpu::idle(); }
 }
