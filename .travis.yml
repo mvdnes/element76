@@ -7,10 +7,10 @@ notifications:
     on_failure: always
 
 before_install:
-  - yes | sudo add-apt-repository ppa:hansjorg/rust
-  - sudo apt-get update
+  - curl http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz | tar -xz
 install:
   - sudo apt-get install rust-nightly nasm
+  - sudo rust-nightly-x86_64-unknown-linux-gnu/install.sh
   - ./downloadrustlibdir.sh
 script:
   - make
