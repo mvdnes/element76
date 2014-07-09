@@ -9,7 +9,7 @@ notifications:
 before_install:
   - curl http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz | tar -xz
 install:
-  - sudo apt-get install rust-nightly nasm
+  - sudo apt-get install nasm
   - sudo rust-nightly-x86_64-unknown-linux-gnu/install.sh
   - ./downloadrustlibdir.sh
 script:
