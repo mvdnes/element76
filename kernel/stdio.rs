@@ -26,9 +26,9 @@ impl StdioWriter
 
 	pub fn clear_screen(&mut self)
 	{
-		for x in range(0u, COLS)
+		for y in range(0u, ROWS)
 		{
-			for y in range(0u, ROWS)
+			for x in range(0u, COLS)
 			{
 				vga::putc(x, y, 0);
 				vga::setfg(x, y, self.fg);
