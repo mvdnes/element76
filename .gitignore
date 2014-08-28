@@ -1,4 +1,4 @@
 *.o
-main.a
-kernel.bin
+bin/libkernel.a
+bin/kernel.bin
 rustlibdir

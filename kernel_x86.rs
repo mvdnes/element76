@@ -1,4 +1,4 @@
-#![crate_name = "main"]
+#![crate_name = "kernel"]
 #![crate_type = "staticlib"]
 #![no_std]
 #![feature(globs, asm, lang_items)]
