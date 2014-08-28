@@ -8,7 +8,7 @@ static GDT_COUNT: uint = 5;
 static mut gdt_entries: [GDTEntry,.. GDT_COUNT] = [GDTEntry { limit_low: 0, base_low: 0, base_middle: 0, access: 0, granularity: 0, base_high: 0 },.. GDT_COUNT];
 static mut gdt_ptr: GDTPointer = GDTPointer { limit: 0, base: 0 };
 
-#[packed]
+#[repr(packed)]
 struct GDTEntry
 {
 	limit_low: u16,
@@ -19,7 +19,7 @@ struct GDTEntry
 	base_high: u8
 }
 
-#[packed]
+#[repr(packed)]
 struct GDTPointer
 {
 	limit: u16,
@@ -31,7 +31,7 @@ pub fn init_gdt()
 	unsafe
 	{
 		gdt_ptr.limit = (::core::mem::size_of::<GDTEntry>() * GDT_COUNT - 1) as u16;
-		gdt_ptr.base = &gdt_entries as *const [GDTEntry,.. GDT_COUNT] as u32;
+		gdt_ptr.base = &mut gdt_entries as *mut [GDTEntry,.. GDT_COUNT] as u32;
 
 		gdt_set_gate(0, 0, 0, 0, 0);
 		gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
@@ -39,7 +39,7 @@ pub fn init_gdt()
 		gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
 		gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 
-		gdt_flush(&gdt_ptr as *const GDTPointer as u32);
+		gdt_flush(&mut gdt_ptr as *mut GDTPointer as u32);
 	};
 }
 

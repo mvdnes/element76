@@ -25,7 +25,7 @@ $(ASSEMBLIES): %.o : %.asm
 
 
 $(RUSTLIB): main_x86.rs $(RUST_DEPENDENCIES)
-	$(RUSTC) -O -L rustlibdir --target $(TARGET) $< -o $@
+	$(RUSTC) -L rustlibdir --target $(TARGET) $< -o $@
 
 $(BINARY): $(ASSEMBLIES) $(RUSTLIB)
 	$(LD) --gc-sections -m elf_i386 -T link.ld -o $@ $^

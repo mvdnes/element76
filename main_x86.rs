@@ -4,6 +4,7 @@
 #![feature(globs, asm, lang_items)]
 
 extern crate core;
+extern crate rlibc;
 
 #[path = "arch/x86/"]
 pub mod platform {
