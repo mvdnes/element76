@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TARGET=i686-unknowni-linux-gnu
+TARGET=i686-unknown-linux-gnu
 URL="http://static.rust-lang.org/dist/rust-nightly-${TARGET}.tar.gz"
 TARPATH=rust-nightly-${TARGET}/lib/rustlib/${TARGET}/lib/
 COMPONENTS=5
