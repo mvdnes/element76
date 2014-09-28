@@ -23,8 +23,8 @@ fn main()
 	printer.print_screen("Hello, World!");
 }
 
-#[lang = "begin_unwind"]
-extern fn begin_unwind(args: &::core::fmt::Arguments, file: &str, line: uint) -> !
+#[lang = "fail_fmt"]
+extern fn fail_fmt(args: &::core::fmt::Arguments, file: &str, line: uint) -> !
 {
 	let mut printer = StdioWriter::new();
 	printer.bg = Black;
