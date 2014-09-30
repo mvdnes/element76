@@ -35,10 +35,10 @@ impl StdioWriter
 				vga::setbg(x, y, self.bg);
 			}
 		}
-		self.move(0, 0);
+		self.go_to(0, 0);
 	}
 
-	pub fn move(&mut self, x: uint, y: uint)
+	pub fn go_to(&mut self, x: uint, y: uint)
 	{
 		self.move_coords(x, y);
 		self.set_cursor();

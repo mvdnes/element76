@@ -19,7 +19,7 @@ fn main()
 	printer.fg = Yellow;
 	printer.clear_screen();
 	printer.fg = White;
-	printer.move(3, 3);
+	printer.go_to(3, 3);
 	printer.print_screen("Hello, World!");
 }
 
