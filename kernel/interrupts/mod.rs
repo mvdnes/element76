@@ -4,7 +4,6 @@ use platform::vga::{Black, White};
 mod timer;
 mod keyboard;
 
-#[no_split_stack]
 pub fn handle_interrupt(interrupt_number: u32, error_code: u32)
 {
 	match interrupt_number
@@ -15,7 +14,6 @@ pub fn handle_interrupt(interrupt_number: u32, error_code: u32)
 	};
 }
 
-#[no_split_stack]
 fn unknown_irq(interrupt_number: u32, error_code: u32)
 {
 	let mut printer = StdioWriter::new();

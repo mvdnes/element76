@@ -5,7 +5,6 @@ use platform::vga::{Yellow, LightRed};
 static mut shift: uint = 0;
 static mut irqprinter: StdioWriter = StdioWriter{ xpos: 0, ypos: 4, fg: Yellow, bg: LightRed };
 
-#[no_split_stack]
 pub fn keyboard_irq()
 {
 	let mut printer = unsafe { irqprinter };
