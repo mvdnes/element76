@@ -1,10 +1,11 @@
 RUSTC?=rustc
+CARGO?=cargo
 NASM?=nasm
 LD?=ld
 
 ARCH_DEPENDENCIES=$(wildcard arch/x86/*/*.rs)
 KERNEL_DEPENDENCIES=$(wildcard kernel/*.rs) $(wildcard kernel/*/*.rs)
-RUST_DEPENDENCIES=$(ARCH_DEPENDENCIES) $(KERNEL_DEPENDENCIES)
+RUST_DEPENDENCIES=$(ARCH_DEPENDENCIES) $(KERNEL_DEPENDENCIES) bin/librlibc.rlib
 ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard arch/x86/asm/*.asm))
 TARGET=i686-unknown-linux-gnu
 RUSTLIB=bin/libkernel.a
@@ -18,14 +19,16 @@ run: $(BINARY)
 
 .PHONY: clean
 clean:
-	$(RM) $(BINARY) *.o $(ASSEMBLIES) $(RUSTLIB)
+	$(RM) $(BINARY) *.o $(ASSEMBLIES) $(RUSTLIB) bin/librlibc.rlib
 
 $(ASSEMBLIES): %.o : %.asm
 	$(NASM) -f elf32 -o $@ $<
 
-
-$(RUSTLIB): kernel_x86.rs $(RUST_DEPENDENCIES)
-	$(RUSTC) -L rustlibdir --target $(TARGET) $< --out-dir=bin
+$(RUSTLIB): kernel_x86.rs $(RUST_DEPENDENCIES) bin/librlibc.rlib
+	$(RUSTC) -L rustlibdir -L bin --target $(TARGET) $< --out-dir=bin
 
 $(BINARY): $(ASSEMBLIES) $(RUSTLIB)
 	$(LD) --gc-sections -m elf_i386 -T link.ld -o $@ $^
+
+bin/librlibc.rlib: rlibc/src/lib.rs
+	$(RUSTC) --target $(TARGET) -L rustlibdir --out-dir=bin --crate-type=rlib --crate-name=rlibc $<
