@@ -1,7 +1,7 @@
 pub enum ArchKeyboardAction
 {
-	ArchKeyDown(u8),
-	ArchKeyUp(u8)
+	Down(u8),
+	Up(u8)
 }
 
 pub fn get_key() -> ArchKeyboardAction
@@ -10,7 +10,7 @@ pub fn get_key() -> ArchKeyboardAction
 	let key = raw & 0x7F;
 	match raw & 0x80
 	{
-		0 => ArchKeyDown(key),
-		_ => ArchKeyUp(key),
+		0 => ArchKeyboardAction::Down(key),
+		_ => ArchKeyboardAction::Up(key),
 	}
 }

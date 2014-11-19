@@ -1,11 +1,11 @@
 use kernel::stdio::StdioWriter;
-use platform::vga::{White, Black};
+use platform::vga::Color;
 
 static mut tick: uint = 48;
 
 pub fn handle_irq()
 {
-	let mut printer = StdioWriter { xpos: 0, ypos: 10, fg: White, bg: Black };
+	let mut printer = StdioWriter { xpos: 0, ypos: 10, fg: Color::White, bg: Color::Black };
 	let mytick = unsafe
 	{
 		tick = (tick + 1) % 50;

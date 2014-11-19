@@ -1,6 +1,6 @@
 use core::prelude::*;
 use core::iter::range_step_inclusive;
-use platform::vga::{Color, COLS, ROWS, Black, White};
+use platform::vga::{Color, COLS, ROWS};
 use platform::vga;
 
 pub struct StdioWriter
@@ -19,8 +19,8 @@ impl StdioWriter
 		{
 			xpos: 0,
 			ypos: 0,
-			fg: White,
-			bg: Black
+			fg: Color::White,
+			bg: Color::Black
 		}
 	}
 

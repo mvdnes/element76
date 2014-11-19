@@ -1,4 +1,4 @@
-use platform::vga::{Red, White, Yellow, Black};
+use platform::vga::Color;
 use kernel::stdio::StdioWriter;
 use core::fmt::FormatWriter;
 
@@ -15,10 +15,10 @@ pub fn entry() -> !
 fn main()
 {
 	let mut printer = StdioWriter::new();
-	printer.bg = Red;
-	printer.fg = Yellow;
+	printer.bg = Color::Red;
+	printer.fg = Color::Yellow;
 	printer.clear_screen();
-	printer.fg = White;
+	printer.fg = Color::White;
 	printer.go_to(3, 3);
 	printer.print_screen("Hello, World!");
 }
@@ -27,8 +27,8 @@ fn main()
 extern fn panic_fmt(args: &::core::fmt::Arguments, file: &str, line: uint) -> !
 {
 	let mut printer = StdioWriter::new();
-	printer.bg = Black;
-	printer.fg = Red;
+	printer.bg = Color::Black;
+	printer.fg = Color::Red;
 
 	printer.print_screen("RUST FAIL");
 	printer.crlf();
