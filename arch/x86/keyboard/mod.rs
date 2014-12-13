@@ -1,8 +1,12 @@
+use core::kinds::Copy;
+
 pub enum ArchKeyboardAction
 {
 	Down(u8),
 	Up(u8)
 }
+
+impl Copy for ArchKeyboardAction {}
 
 pub fn get_key() -> ArchKeyboardAction
 {

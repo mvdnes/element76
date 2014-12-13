@@ -4,6 +4,8 @@
  * See: http://www.jamesmolloy.co.uk/tutorial_html/4.-The%20GDT%20and%20IDT.html
  */
 
+use core::kinds::Copy;
+
 const GDT_COUNT: uint = 5;
 static mut gdt_entries: [GDTEntry,.. GDT_COUNT] = [GDTEntry { limit_low: 0, base_low: 0, base_middle: 0, access: 0, granularity: 0, base_high: 0 },.. GDT_COUNT];
 static mut gdt_ptr: GDTPointer = GDTPointer { limit: 0, base: 0 };
@@ -18,6 +20,8 @@ struct GDTEntry
 	granularity: u8,
 	base_high: u8
 }
+
+impl Copy for GDTEntry {}
 
 #[repr(packed)]
 struct GDTPointer

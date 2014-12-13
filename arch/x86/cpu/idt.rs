@@ -4,6 +4,8 @@
  * See: http://www.jamesmolloy.co.uk/tutorial_html/4.-The%20GDT%20and%20IDT.html
  */
 
+use core::kinds::Copy;
+
 const IDT_COUNT: uint = 256;
 static mut idt_entries: [IDTEntry,.. IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 },.. IDT_COUNT];
 static mut idt_ptr: IDTPointer = IDTPointer { limit: 0, base: 0 };
@@ -17,6 +19,8 @@ struct IDTEntry
 	flags: u8,
 	base_high: u16
 }
+
+impl Copy for IDTEntry {}
 
 #[repr(packed)]
 struct IDTPointer

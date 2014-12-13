@@ -1,3 +1,5 @@
+use core::kinds::Copy;
+
 mod gdt;
 mod idt;
 mod pic;
@@ -12,6 +14,8 @@ pub struct InterruptArguments {
 	error_code: u32,
 	_eip: u32, _cs: u32, _eflags: u32, _useresp: u32, _ss: u32,
 }
+
+impl Copy for InterruptArguments {}
 
 pub fn idle()
 {

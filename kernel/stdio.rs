@@ -11,6 +11,8 @@ pub struct StdioWriter
 	pub bg: Color
 }
 
+impl Copy for StdioWriter {}
+
 impl StdioWriter
 {
 	pub fn new() -> StdioWriter

@@ -1,4 +1,5 @@
 use platform::io;
+use core::kinds::Copy;
 
 pub enum Color {
     Black = 0,
@@ -18,6 +19,8 @@ pub enum Color {
     Yellow = 14,
     White = 15,
 }
+
+impl Copy for Color {}
 
 pub static ROWS: uint = 25;
 pub static COLS: uint = 80;
