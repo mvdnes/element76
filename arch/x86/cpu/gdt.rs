@@ -7,7 +7,7 @@
 use core::kinds::Copy;
 
 const GDT_COUNT: uint = 5;
-static mut gdt_entries: [GDTEntry,.. GDT_COUNT] = [GDTEntry { limit_low: 0, base_low: 0, base_middle: 0, access: 0, granularity: 0, base_high: 0 },.. GDT_COUNT];
+static mut gdt_entries: [GDTEntry; GDT_COUNT] = [GDTEntry { limit_low: 0, base_low: 0, base_middle: 0, access: 0, granularity: 0, base_high: 0 }; GDT_COUNT];
 static mut gdt_ptr: GDTPointer = GDTPointer { limit: 0, base: 0 };
 
 #[repr(packed)]
@@ -35,7 +35,7 @@ pub fn init_gdt()
 	unsafe
 	{
 		gdt_ptr.limit = (::core::mem::size_of::<GDTEntry>() * GDT_COUNT - 1) as u16;
-		gdt_ptr.base = &gdt_entries as *const [GDTEntry,.. GDT_COUNT] as u32;
+		gdt_ptr.base = &gdt_entries as *const [GDTEntry; GDT_COUNT] as u32;
 
 		gdt_set_gate(0, 0, 0, 0, 0);
 		gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);

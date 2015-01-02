@@ -7,7 +7,7 @@
 use core::kinds::Copy;
 
 const IDT_COUNT: uint = 256;
-static mut idt_entries: [IDTEntry,.. IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 },.. IDT_COUNT];
+static mut idt_entries: [IDTEntry; IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 }; IDT_COUNT];
 static mut idt_ptr: IDTPointer = IDTPointer { limit: 0, base: 0 };
 
 #[repr(packed)]
@@ -34,7 +34,7 @@ pub fn init_idt()
 	unsafe
 	{
 		idt_ptr.limit = (::core::mem::size_of::<IDTEntry>() * IDT_COUNT - 1) as u16;
-		idt_ptr.base = &idt_entries as *const [IDTEntry,.. IDT_COUNT] as u32;
+		idt_ptr.base = &idt_entries as *const [IDTEntry; IDT_COUNT] as u32;
 
 		idt_set_gate( 0, isr0  as u32, 0x08, 0x8E);
 		idt_set_gate( 1, isr1  as u32, 0x08, 0x8E);
