@@ -195,13 +195,13 @@ impl StdioWriter
 	}
 }
 
-impl ::core::fmt::FormatWriter for StdioWriter
+impl ::core::fmt::Writer for StdioWriter
 {
-	fn write(&mut self, bytes: &[u8]) -> ::core::fmt::Result
+	fn write_str(&mut self, s: &str) -> ::core::fmt::Result
 	{
-		for b in bytes.iter()
+		for b in s.bytes()
 		{
-			self.raw_print_char(*b);
+			self.raw_print_char(b);
 			self.go_right();
 		}
 		self.set_cursor();
