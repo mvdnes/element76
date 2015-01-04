@@ -50,7 +50,7 @@ pub fn setbg(xpos: uint, ypos: uint, value: Color)
 	unsafe
 	{
 		let ptr = (0xb8000 + ypos * COLS * 2 + xpos * 2 + 1) as *mut u8;
-		*ptr = (*ptr & 0x0F) | ((value as u8 << 4) & 0x70);
+		*ptr = (*ptr & 0x0F) | (((value as u8) << 4) & 0x70);
 	}
 }
 
