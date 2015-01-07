@@ -6,7 +6,7 @@ TARPATH=rust-nightly-${TARGET}/lib/rustlib/${TARGET}/lib/
 COMPONENTS=5
 FOLDER=rustlibdir
 
-RUST_TARGET=$(rustc --version verbose | grep host | awk '{print $2}')
+RUST_TARGET=$(rustc --version --verbose | grep host | awk '{print $2}')
 
 if [ "$TARGET" = "$RUST_TARGET" ]
 then
