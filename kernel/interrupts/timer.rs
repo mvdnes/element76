@@ -1,7 +1,7 @@
 use kernel::stdio::StdioWriter;
 use platform::vga::Color;
 
-static mut tick: uint = 48;
+static mut tick: u32 = 48;
 
 pub fn handle_irq()
 {

@@ -3,7 +3,7 @@ use platform::io;
 static TIMER_COMMAND: u16 = 0x43;
 static TIMER_CHANNEL0: u16 = 0x40;
 
-pub fn set_interval(frequency: uint)
+pub fn set_interval(frequency: u32)
 {
 	let divisor = 1193180 / frequency;
 	let l = divisor as u8;

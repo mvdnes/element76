@@ -22,10 +22,10 @@ pub enum Color {
 
 impl Copy for Color {}
 
-pub static ROWS: uint = 25;
-pub static COLS: uint = 80;
+pub static ROWS: u32 = 25;
+pub static COLS: u32 = 80;
 
-pub fn putc(xpos: uint, ypos: uint, value: u8)
+pub fn putc(xpos: u32, ypos: u32, value: u8)
 {
 	if xpos >= COLS || ypos >= ROWS { return }
 	unsafe
@@ -34,7 +34,7 @@ pub fn putc(xpos: uint, ypos: uint, value: u8)
 	}
 }
 
-pub fn setfg(xpos: uint, ypos: uint, value: Color)
+pub fn setfg(xpos: u32, ypos: u32, value: Color)
 {
 	if xpos >= COLS || ypos >= ROWS { return }
 	unsafe
@@ -44,7 +44,7 @@ pub fn setfg(xpos: uint, ypos: uint, value: Color)
 	}
 }
 
-pub fn setbg(xpos: uint, ypos: uint, value: Color)
+pub fn setbg(xpos: u32, ypos: u32, value: Color)
 {
 	if xpos >= COLS || ypos >= ROWS { return }
 	unsafe
@@ -54,7 +54,7 @@ pub fn setbg(xpos: uint, ypos: uint, value: Color)
 	}
 }
 
-pub fn move_cursor(xpos: uint, ypos: uint)
+pub fn move_cursor(xpos: u32, ypos: u32)
 {
 	if xpos >= COLS || ypos >= COLS { return };
 	let pos = ypos * COLS + xpos;
