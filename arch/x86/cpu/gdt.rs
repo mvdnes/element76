@@ -4,7 +4,7 @@
  * See: http://www.jamesmolloy.co.uk/tutorial_html/4.-The%20GDT%20and%20IDT.html
  */
 
-use core::kinds::Copy;
+use core::marker::Copy;
 
 const GDT_COUNT: uint = 5;
 static mut gdt_entries: [GDTEntry; GDT_COUNT] = [GDTEntry { limit_low: 0, base_low: 0, base_middle: 0, access: 0, granularity: 0, base_high: 0 }; GDT_COUNT];

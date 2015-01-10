@@ -1,5 +1,5 @@
+use core::marker::Copy;
 use platform::io;
-use core::kinds::Copy;
 
 pub enum Color {
     Black = 0,

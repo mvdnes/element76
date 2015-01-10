@@ -1,4 +1,4 @@
-use core::kinds::Copy;
+use core::marker::Copy;
 
 pub enum ArchKeyboardAction
 {
