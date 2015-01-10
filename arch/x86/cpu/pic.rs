@@ -43,7 +43,7 @@ pub fn remap_pic(offset: u8)
 	}
 }
 
-pub fn enable_irq(irq: uint)
+pub fn enable_irq(irq: u32)
 {
 	let (port, line) = if irq < 8
 	{
@@ -61,7 +61,7 @@ pub fn enable_irq(irq: uint)
 	}
 }
 
-pub fn disable_irq(irq: uint)
+pub fn disable_irq(irq: u32)
 {
 	let (port, line) = if irq < 8
 	{

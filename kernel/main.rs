@@ -24,7 +24,7 @@ fn main()
 }
 
 #[lang = "panic_fmt"]
-extern fn panic_fmt(args: ::core::fmt::Arguments, file: &str, line: uint) -> !
+extern fn panic_fmt(args: ::core::fmt::Arguments, file: &str, line: u32) -> !
 {
 	let mut printer = StdioWriter::new();
 	printer.bg = Color::Black;

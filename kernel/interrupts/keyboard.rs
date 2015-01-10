@@ -2,7 +2,7 @@ use kernel::stdio::StdioWriter;
 use kernel::keyboard::*;
 use platform::vga::Color;
 
-static mut shift: uint = 0;
+static mut shift: u32 = 0;
 static mut irqprinter: StdioWriter = StdioWriter{ xpos: 0, ypos: 4, fg: Color::Yellow, bg: Color::LightRed };
 
 pub fn keyboard_irq()
@@ -19,7 +19,7 @@ pub fn keyboard_irq()
 			KeyboardKey::Return => { printer.crlf(); },
 			KeyboardKey::Shift => unsafe { shift += 1; },
 			KeyboardKey::Tab => { printer.tab(); },
-			KeyboardKey::Unknown(c) => { printer.print_hex(c as uint, 8); printer.print_char(' '); },
+			KeyboardKey::Unknown(c) => { printer.print_hex(c as u32, 8); printer.print_char(' '); },
 			_ => {},
 		},
 		_ => {},

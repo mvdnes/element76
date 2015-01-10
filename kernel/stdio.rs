@@ -5,8 +5,8 @@ use platform::vga;
 
 pub struct StdioWriter
 {
-	pub xpos: uint,
-	pub ypos: uint,
+	pub xpos: u32,
+	pub ypos: u32,
 	pub fg: Color,
 	pub bg: Color
 }
@@ -28,9 +28,9 @@ impl StdioWriter
 
 	pub fn clear_screen(&mut self)
 	{
-		for y in range(0u, ROWS)
+		for y in range(0u32, ROWS)
 		{
-			for x in range(0u, COLS)
+			for x in range(0u32, COLS)
 			{
 				vga::putc(x, y, 0);
 				vga::setfg(x, y, self.fg);
@@ -40,7 +40,7 @@ impl StdioWriter
 		self.go_to(0, 0);
 	}
 
-	pub fn go_to(&mut self, x: uint, y: uint)
+	pub fn go_to(&mut self, x: u32, y: u32)
 	{
 		self.move_coords(x, y);
 		self.set_cursor();
@@ -97,7 +97,7 @@ impl StdioWriter
 		}
 	}
 
-	fn move_coords(&mut self, x: uint, y: uint)
+	fn move_coords(&mut self, x: u32, y: u32)
 	{
 		let mut newx = x;
 		let mut newy = y;
@@ -112,7 +112,7 @@ impl StdioWriter
 		vga::move_cursor(self.xpos, self.ypos);
 	}
 
-	pub fn print_dec(&mut self, v: uint)
+	pub fn print_dec(&mut self, v: u32)
 	{
 		if v == 0
 		{
@@ -136,13 +136,13 @@ impl StdioWriter
 		self.set_cursor();
 	}
 
-	pub fn print_bin(&mut self, v: uint, sz: uint)
+	pub fn print_bin(&mut self, v: u32, sz: u32)
 	{
 		self.print_screen("0b");
 
-		for i in range_step_inclusive(sz as int - 1, 0, -1)
+		for i in range_step_inclusive(sz as i32 - 1, 0, -1)
 		{
-			let c = match (v >> (i as uint)) & 0x1
+			let c = match (v >> (i as u32)) & 0x1
 			{
 				0 => '0',
 				_ => '1',
@@ -153,16 +153,16 @@ impl StdioWriter
 		self.set_cursor();
 	}
 
-	pub fn print_hex(&mut self, v: uint, sz: uint)
+	pub fn print_hex(&mut self, v: u32, sz: u32)
 	{
 		self.print_screen("0x");
 
-		for i in range_step_inclusive(sz as int - 4, 0i, -4)
+		for i in range_step_inclusive(sz as i32 - 4, 0i32, -4)
 		{
-			let c = match (v >> (i as uint)) & 0xF
+			let c = match (v >> (i as u32)) & 0xF
 			{
-				c if c <= 9 => c + '0' as uint,
-				c => c + -10 + 'A' as uint,
+				c if c <= 9 => c + '0' as u32,
+				c => c + -10 + 'A' as u32,
 			} as u8;
 			self.raw_print_char(c);
 			self.go_right();
