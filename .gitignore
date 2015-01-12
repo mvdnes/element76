@@ -3,3 +3,4 @@ bin/libkernel.a
 bin/kernel.bin
 bin/librlibc.rlib
 rustlibdir
+*.deflate
