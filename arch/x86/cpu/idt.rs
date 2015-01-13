@@ -85,7 +85,7 @@ pub fn init_idt()
 		idt_set_gate(46, irq14 as usize, 0x08, 0x8E);
 		idt_set_gate(47, irq15 as usize, 0x08, 0x8E);
 
-		idt_flush(&idt_ptr as *const IDTPointer as usize);
+		idt_flush(&idt_ptr as *const IDTPointer as u32);
 	}
 }
 
@@ -101,7 +101,7 @@ unsafe fn idt_set_gate(n: usize, base: usize, sel: u16, flags: u8)
 
 extern
 {
-	fn idt_flush(pointer: usize);
+	fn idt_flush(pointer: u32);
 	fn isr0 ();
 	fn isr1 ();
 	fn isr2 ();

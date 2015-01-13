@@ -43,7 +43,7 @@ pub fn init_gdt()
 		gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
 		gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 
-		gdt_flush(&gdt_ptr as *const GDTPointer as usize);
+		gdt_flush(&gdt_ptr as *const GDTPointer as u32);
 	};
 }
 
@@ -62,5 +62,5 @@ unsafe fn gdt_set_gate(n: usize, base: usize, limit: usize, access: u8, gran: u8
 
 extern
 {
-	fn gdt_flush(pointer: usize);
+	fn gdt_flush(pointer: u32);
 }

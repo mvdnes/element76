@@ -2,6 +2,7 @@
 #![crate_type = "staticlib"]
 #![no_std]
 #![feature(asm, lang_items)]
+#![allow(unstable)]
 
 extern crate core;
 extern crate rlibc;

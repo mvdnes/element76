@@ -56,7 +56,7 @@ impl StdioWriter
 	pub fn tab(&mut self)
 	{
 		let x = self.xpos;
-		for _ in range(0, 4 - (x % 4))
+		for _ in (0 .. 4 - (x % 4))
 		{
 			self.raw_print_char(' ' as u8);
 			self.go_right();
