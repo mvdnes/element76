@@ -1,0 +1,5 @@
+* text eol=lf
+
+*.S text
+*.s text
+*.rs text
