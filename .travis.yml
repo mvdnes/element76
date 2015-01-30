@@ -6,7 +6,8 @@ notifications:
     on_failure: always
 
 install:
-  - sudo apt-get install nasm
+  - sudo apt-get install nasm qemu-system
   - ./downloadrustlibdir.sh
 script:
   - make
+  - "{ sleep 10; echo q; } | qemu-system-i386 -kernel bin/kernel.bin -monitor stdio -display none"
