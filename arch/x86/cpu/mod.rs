@@ -17,6 +17,10 @@ pub struct InterruptArguments {
 
 impl Copy for InterruptArguments {}
 
+extern "C" {
+    fn enable_features();
+}
+
 pub fn idle()
 {
 	unsafe
@@ -51,6 +55,7 @@ pub fn setup()
 	gdt::init_gdt();
 	pic::remap_pic(IRQ_OFFSET);
 	idt::init_idt();
+    unsafe { enable_features(); }
 	timer::set_interval(50);
 }
 

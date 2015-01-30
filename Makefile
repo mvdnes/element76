@@ -10,7 +10,7 @@ ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard arch/x86/asm/*.asm))
 TARGET=i686-unknown-linux-gnu
 RUSTLIB=bin/libkernel.a
 BINARY=bin/kernel.bin
-RUSTC_OPTIONS=--target $(TARGET) -C target-cpu=generic
+RUSTC_OPTIONS=--target $(TARGET)
 
 all: $(BINARY)
 
@@ -32,4 +32,4 @@ $(BINARY): $(ASSEMBLIES) $(RUSTLIB)
 	$(LD) --gc-sections -m elf_i386 -T link.ld -o $@ $^
 
 bin/librlibc.rlib: rlibc/src/lib.rs
-	$(RUSTC)  -L rustlibdir --out-dir=bin --crate-type=rlib --crate-name=rlibc $(RUSTC_OPTIONS) $<
+	$(RUSTC) -L rustlibdir --out-dir=bin --crate-type=rlib --crate-name=rlibc $(RUSTC_OPTIONS) $<
