@@ -4,6 +4,7 @@ mod gdt;
 mod idt;
 mod pic;
 mod timer;
+mod features;
 
 static IRQ_OFFSET: u8 = 0x20;
 
@@ -16,10 +17,6 @@ pub struct InterruptArguments {
 }
 
 impl Copy for InterruptArguments {}
-
-extern "C" {
-    fn enable_features();
-}
 
 pub fn idle()
 {
@@ -52,10 +49,10 @@ pub fn request_int3()
 
 pub fn setup()
 {
+    features::enable_sse();
 	gdt::init_gdt();
 	pic::remap_pic(IRQ_OFFSET);
 	idt::init_idt();
-    unsafe { enable_features(); }
 	timer::set_interval(50);
 }
 
