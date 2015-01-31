@@ -1,18 +1,18 @@
  %macro ISR_NOERRCODE 1  ; define a macro, taking one parameter
   [GLOBAL isr%1]         ; %1 accesses the first parameter.
   isr%1:
-    cli
-    push byte 0
-    push byte %1
-    jmp isr_common_stub
+	cli
+	push byte 0
+	push byte %1
+	jmp isr_common_stub
 %endmacro
 
 %macro ISR_ERRCODE 1
   [GLOBAL isr%1]
   isr%1:
-    cli
-    push byte %1
-    jmp isr_common_stub
+	cli
+	push byte %1
+	jmp isr_common_stub
 %endmacro
 
 %macro IRQ 2
@@ -98,7 +98,11 @@ isr_common_stub:
 	mov fs, ax
 	mov gs, ax
 
+	fxsave [saved_sse]
+
 	call isr_handler
+
+	fxrstor [saved_sse]
 
 	pop eax        ; reload the original data segment descriptor
 	mov ds, ax
@@ -109,4 +113,9 @@ isr_common_stub:
 	popad                     ; Pops edi,esi,ebp...
 	add esp, 8     ; Cleans up the pushed error code and pushed ISR number
 	sti
-	iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP 
+	iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
+
+global saved_sse
+segment .data
+	align 16
+	saved_sse: TIMES 512 db 0 
