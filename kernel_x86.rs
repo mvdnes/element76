@@ -23,5 +23,15 @@ pub mod kernel {
 	mod keyboard;
 }
 
+// Remove this when https://github.com/rust-lang/rust/issues/21827 is solved
+mod std {
+    pub mod option {
+        pub use core::option::*;
+    }
+    pub mod iter {
+        pub use core::iter::*;
+    }
+}
+
 #[lang = "stack_exhausted"] extern fn stack_exhausted() {}
 #[lang = "eh_personality"] extern fn eh_personality() {}
