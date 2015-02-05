@@ -1,4 +1,4 @@
-RUSTC?=rustc
+RUSTC?=rustc -g
 CARGO?=cargo
 NASM?=nasm
 LD?=ld
