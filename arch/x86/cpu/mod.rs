@@ -8,10 +8,6 @@ mod features;
 
 static IRQ_OFFSET: u8 = 0x20;
 
-extern "C" {
-    static mut saved_sse: [u8; 512];
-}
-
 #[repr(C)]
 pub struct InterruptArguments {
 	_ds: u32, _edi: u32, _esi: u32, _ebp: u32, _esp: u32, _ebx: u32, _edx: u32, _ecx: u32, _eax: u32,
@@ -61,10 +57,8 @@ pub fn setup()
 }
 
 #[no_mangle]
-pub extern "C" fn isr_handler(args: InterruptArguments)
+pub extern "C" fn isr_handler(args: &InterruptArguments, fxdata: [u8; 512])
 {
-    let _sse_data = unsafe { saved_sse };
-
 	::kernel::interrupts::handle_interrupt(args.interrupt_number, args.error_code);
 
 	// Ack IRQ

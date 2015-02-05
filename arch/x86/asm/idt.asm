@@ -98,11 +98,17 @@ isr_common_stub:
 	mov fs, ax
 	mov gs, ax
 
-	fxsave [saved_sse]
+    mov eax, esp
+    sub esp, 512
+    and esp, -16
+    fxsave [esp]
+    push eax
 
 	call isr_handler
 
-	fxrstor [saved_sse]
+    pop eax
+    fxrstor [esp]
+    mov esp, eax
 
 	pop eax        ; reload the original data segment descriptor
 	mov ds, ax
@@ -114,8 +120,3 @@ isr_common_stub:
 	add esp, 8     ; Cleans up the pushed error code and pushed ISR number
 	sti
 	iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
-
-global saved_sse
-segment .data
-	align 16
-	saved_sse: TIMES 512 db 0 
