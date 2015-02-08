@@ -57,7 +57,7 @@ pub fn setup()
 }
 
 #[no_mangle]
-pub extern "C" fn isr_handler(args: &InterruptArguments, fxdata: [u8; 512])
+pub extern "C" fn isr_handler(args: &InterruptArguments, _fpu_sse_data: [u8; 512])
 {
 	::kernel::interrupts::handle_interrupt(args.interrupt_number, args.error_code);
 
