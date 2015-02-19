@@ -2,8 +2,8 @@
 
 TARGET=i686-unknown-linux-gnu
 URL="http://static.rust-lang.org/dist/rust-nightly-${TARGET}.tar.gz"
-TARPATH=rust-nightly-${TARGET}/lib/rustlib/${TARGET}/lib/
-COMPONENTS=5
+TARPATH=rust-nightly-${TARGET}/rustc/lib/rustlib/${TARGET}/lib/
+COMPONENTS=6
 FOLDER=rustlibdir
 
 RUST_TARGET=$(rustc --version --verbose | grep host | awk '{print $2}')
