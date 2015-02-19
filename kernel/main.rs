@@ -1,6 +1,6 @@
 use platform::vga::Color;
 use kernel::stdio::StdioWriter;
-use core::fmt::Writer;
+use core::fmt::Write;
 
 #[no_mangle]
 pub fn entry() -> !

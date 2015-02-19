@@ -195,7 +195,7 @@ impl StdioWriter
 	}
 }
 
-impl ::core::fmt::Writer for StdioWriter
+impl ::core::fmt::Write for StdioWriter
 {
 	fn write_str(&mut self, s: &str) -> ::core::fmt::Result
 	{
