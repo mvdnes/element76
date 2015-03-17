@@ -162,7 +162,7 @@ impl StdioWriter
 			let c = match (v >> (i as u32)) & 0xF
 			{
 				c if c <= 9 => c + '0' as u32,
-				c => c + -10 + 'A' as u32,
+				c => c - 10 + 'A' as u32,
 			} as u8;
 			self.raw_print_char(c);
 			self.go_right();
