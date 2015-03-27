@@ -179,7 +179,7 @@ impl StdioWriter
 
 	fn raw_print_char(&self, value: u8)
 	{
-		vga::putc(self.xpos, self.ypos, value as u8);
+		vga::putc(self.xpos, self.ypos, value);
 		vga::setfg(self.xpos, self.ypos, self.fg);
 		vga::setbg(self.xpos, self.ypos, self.bg);
 	}

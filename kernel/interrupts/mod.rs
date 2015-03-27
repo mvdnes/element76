@@ -24,7 +24,7 @@ fn unknown_irq(interrupt_number: u32, error_code: u32)
 	printer.fg = Color::Black;
 	printer.bg = Color::White;
 	printer.go_to(10, 6);
-	printer.print_hex(interrupt_number as u32, 32);
+	printer.print_hex(interrupt_number, 32);
 	printer.go_to(10, 7);
-	printer.print_bin(error_code as u32, 32);
+	printer.print_bin(error_code, 32);
 }
