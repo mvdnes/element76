@@ -1,4 +1,5 @@
 use core::marker::Copy;
+use core::clone::Clone;
 
 mod gdt;
 mod idt;
@@ -17,6 +18,7 @@ pub struct InterruptArguments {
 }
 
 impl Copy for InterruptArguments {}
+impl Clone for InterruptArguments { fn clone(&self) -> Self { *self } }
 
 pub fn idle()
 {

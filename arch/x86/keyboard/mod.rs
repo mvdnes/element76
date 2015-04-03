@@ -1,4 +1,5 @@
 use core::marker::Copy;
+use core::clone::Clone;
 
 pub enum ArchKeyboardAction
 {
@@ -7,6 +8,7 @@ pub enum ArchKeyboardAction
 }
 
 impl Copy for ArchKeyboardAction {}
+impl Clone for ArchKeyboardAction { fn clone(&self) -> Self { *self } }
 
 pub fn get_key() -> ArchKeyboardAction
 {

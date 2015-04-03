@@ -5,6 +5,7 @@
  */
 
 use core::marker::Copy;
+use core::clone::Clone;
 
 const GDT_COUNT: usize = 5;
 static mut gdt_entries: [GDTEntry; GDT_COUNT] = [GDTEntry { limit_low: 0, base_low: 0, base_middle: 0, access: 0, granularity: 0, base_high: 0 }; GDT_COUNT];
@@ -22,6 +23,7 @@ struct GDTEntry
 }
 
 impl Copy for GDTEntry {}
+impl Clone for GDTEntry { fn clone(&self) -> Self { *self } }
 
 #[repr(packed)]
 struct GDTPointer

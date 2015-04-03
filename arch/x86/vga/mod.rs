@@ -1,4 +1,5 @@
 use core::marker::Copy;
+use core::clone::Clone;
 use platform::io;
 
 pub enum Color {
@@ -21,6 +22,7 @@ pub enum Color {
 }
 
 impl Copy for Color {}
+impl Clone for Color { fn clone(&self) -> Self { *self } }
 
 pub static ROWS: u32 = 25;
 pub static COLS: u32 = 80;

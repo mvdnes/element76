@@ -12,6 +12,7 @@ pub struct StdioWriter
 }
 
 impl Copy for StdioWriter {}
+impl Clone for StdioWriter { fn clone(&self) -> Self { *self } }
 
 impl StdioWriter
 {

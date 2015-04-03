@@ -5,6 +5,7 @@
  */
 
 use core::marker::Copy;
+use core::clone::Clone;
 
 const IDT_COUNT: usize = 256;
 static mut idt_entries: [IDTEntry; IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 }; IDT_COUNT];
@@ -21,6 +22,7 @@ struct IDTEntry
 }
 
 impl Copy for IDTEntry {}
+impl Clone for IDTEntry { fn clone(&self) -> Self { *self } }
 
 #[repr(packed)]
 struct IDTPointer
