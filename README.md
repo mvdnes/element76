@@ -11,7 +11,7 @@ Build instructions
 
 If you are not on i686:
 
-- run `./downloadrustlibdir.sh` to download the i686 nightly libraries
+- run `./downloadrustlibdir.sh <version>` to download the i686 nightly libraries for `<version>`. You probably need nightly.
 
 Compile:
 

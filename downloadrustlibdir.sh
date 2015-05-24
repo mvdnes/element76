@@ -1,8 +1,10 @@
 #!/bin/bash
 
+version=$1
+
 TARGET=i686-unknown-linux-gnu
-URL="http://static.rust-lang.org/dist/rust-nightly-${TARGET}.tar.gz"
-TARPATH=rust-nightly-${TARGET}/rustc/lib/rustlib/${TARGET}/lib/
+URL="http://static.rust-lang.org/dist/rust-${version}-${TARGET}.tar.gz"
+TARPATH=rust-${version}-${TARGET}/rustc/lib/rustlib/${TARGET}/lib/
 COMPONENTS=6
 FOLDER=rustlibdir
 

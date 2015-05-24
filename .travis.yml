@@ -1,5 +1,8 @@
 language: rust
 
+rust:
+    - nightly
+
 notifications:
     email:
         on_success: never
@@ -10,7 +13,7 @@ sudo: required
 install:
     - sudo apt-get update -q
     - sudo apt-get install nasm qemu-system
-    - ./downloadrustlibdir.sh
+    - ./downloadrustlibdir.sh 1.0.0 nightly
 
 script:
     - make
