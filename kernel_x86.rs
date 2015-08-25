@@ -4,7 +4,6 @@
 #![feature(no_std, asm, lang_items)]
 #![feature(core, core_prelude, core_str_ext)]
 
-#[macro_use] extern crate core;
 extern crate rlibc;
 
 #[path = "arch/x86/"]
