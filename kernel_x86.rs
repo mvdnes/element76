@@ -2,7 +2,7 @@
 #![crate_type = "staticlib"]
 #![no_std]
 #![feature(no_std, asm, lang_items)]
-#![feature(core, core_prelude, core_str_ext)]
+#![feature(core_str_ext)]
 
 extern crate rlibc;
 

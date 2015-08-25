@@ -1,4 +1,3 @@
-use core::prelude::*;
 use platform::vga::{Color, COLS, ROWS};
 use platform::vga;
 
