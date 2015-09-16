@@ -14,11 +14,11 @@ addons:
     apt:
         packages:
             - nasm
-            - qemu-system-x86
+            - qemu-kvm
 
 install:
     - ./downloadrustlibdir.sh nightly
 
 script:
     - make
-    - "{ sleep 10; echo q; } | qemu-system-i386 -kernel bin/kernel.bin -monitor stdio -display none"
+    - "{ sleep 10; echo q; } | qemu-i386 -kernel bin/kernel.bin -monitor stdio -display none"
