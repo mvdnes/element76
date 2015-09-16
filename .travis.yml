@@ -8,11 +8,15 @@ notifications:
         on_success: never
         on_failure: always
 
-sudo: required
+sudo: false
+
+addons:
+    apt:
+        packages:
+            - nasm
+            - qemu-system
 
 install:
-    - sudo apt-get update -q
-    - sudo apt-get install nasm qemu-system
     - ./downloadrustlibdir.sh nightly
 
 script:
