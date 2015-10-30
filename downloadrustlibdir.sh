@@ -3,7 +3,7 @@
 version=${1-nightly}
 
 TARGET=i686-unknown-linux-gnu
-URL="http://static.rust-lang.org/dist/rust-${version}-${TARGET}.tar.gz"
+URL="https://static-rust-lang-org.s3-us-west-1.amazonaws.com/dist/rust-${version}-${TARGET}.tar.gz"
 TARPATH=rust-${version}-${TARGET}/rust-std-${TARGET}/lib/rustlib/${TARGET}/lib/
 COMPONENTS=6
 FOLDER=rustlibdir
