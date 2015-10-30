@@ -27,9 +27,9 @@ impl StdioWriter
 
 	pub fn clear_screen(&mut self)
 	{
-		for y in (0u32 .. ROWS)
+		for y in 0u32 .. ROWS
 		{
-			for x in (0u32 .. COLS)
+			for x in 0u32 .. COLS
 			{
 				vga::putc(x, y, 0);
 				vga::setfg(x, y, self.fg);
@@ -55,7 +55,7 @@ impl StdioWriter
 	pub fn tab(&mut self)
 	{
 		let x = self.xpos;
-		for _ in (0 .. 4 - (x % 4))
+		for _ in 0 .. 4 - (x % 4)
 		{
 			self.raw_print_char(' ' as u8);
 			self.go_right();
