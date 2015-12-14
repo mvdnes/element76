@@ -1,8 +1,7 @@
 #![crate_name = "kernel"]
 #![crate_type = "staticlib"]
 #![no_std]
-#![feature(no_std, asm, lang_items)]
-#![feature(core_str_ext)]
+#![feature(asm, lang_items)]
 
 extern crate rlibc;
 
