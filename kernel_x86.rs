@@ -21,5 +21,4 @@ pub mod kernel {
 	mod keyboard;
 }
 
-#[lang = "stack_exhausted"] extern fn stack_exhausted() {}
 #[lang = "eh_personality"] extern fn eh_personality() {}
