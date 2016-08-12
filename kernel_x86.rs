@@ -22,3 +22,9 @@ pub mod kernel {
 }
 
 #[lang = "eh_personality"] extern fn eh_personality() {}
+
+#[allow(non_snake_case)]
+#[no_mangle]
+pub extern "C" fn _Unwind_Resume() -> ! {
+    loop {}
+}
