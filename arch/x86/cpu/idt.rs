@@ -8,8 +8,8 @@ use core::marker::Copy;
 use core::clone::Clone;
 
 const IDT_COUNT: usize = 256;
-static mut idt_entries: [IDTEntry; IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 }; IDT_COUNT];
-static mut idt_ptr: IDTPointer = IDTPointer { limit: 0, base: 0 };
+static mut IDT_ENTRIES: [IDTEntry; IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 }; IDT_COUNT];
+static mut IDT_PTR: IDTPointer = IDTPointer { limit: 0, base: 0 };
 
 #[repr(packed)]
 struct IDTEntry
@@ -35,8 +35,8 @@ pub fn init_idt()
 {
 	unsafe
 	{
-		idt_ptr.limit = (::core::mem::size_of::<IDTEntry>() * IDT_COUNT - 1) as u16;
-		idt_ptr.base = &idt_entries as *const [IDTEntry; IDT_COUNT] as usize;
+		IDT_PTR.limit = (::core::mem::size_of::<IDTEntry>() * IDT_COUNT - 1) as u16;
+		IDT_PTR.base = &IDT_ENTRIES as *const [IDTEntry; IDT_COUNT] as usize;
 
 		idt_set_gate( 0, isr0  as usize, 0x08, 0x8E);
 		idt_set_gate( 1, isr1  as usize, 0x08, 0x8E);
@@ -87,18 +87,18 @@ pub fn init_idt()
 		idt_set_gate(46, irq14 as usize, 0x08, 0x8E);
 		idt_set_gate(47, irq15 as usize, 0x08, 0x8E);
 
-		idt_flush(&idt_ptr as *const IDTPointer as u32);
+		idt_flush(&IDT_PTR as *const IDTPointer as u32);
 	}
 }
 
 unsafe fn idt_set_gate(n: usize, base: usize, sel: u16, flags: u8)
 {
-	idt_entries[n].base_low = (base & 0xFFFF) as u16;
-	idt_entries[n].base_high = ((base >> 16) & 0xFFFF) as u16;
+	IDT_ENTRIES[n].base_low = (base & 0xFFFF) as u16;
+	IDT_ENTRIES[n].base_high = ((base >> 16) & 0xFFFF) as u16;
 
-	idt_entries[n].selector = sel;
-	idt_entries[n].zero = 0;
-	idt_entries[n].flags = (flags & 0b11100000) | 0b01110;
+	IDT_ENTRIES[n].selector = sel;
+	IDT_ENTRIES[n].zero = 0;
+	IDT_ENTRIES[n].flags = (flags & 0b11100000) | 0b01110;
 }
 
 extern
