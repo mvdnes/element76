@@ -8,9 +8,10 @@ An operating system written in Rust
 Build instructions
 ------------------
 
-If you are not on i686:
+Setup rust nightly and install i686 target:
 
-- run `./downloadrustlibdir.sh <version>` to download the i686 nightly libraries for `<version>`. You probably need nightly.
+    rustup override nightly
+    rustup target add i686-unknown-linux-gnu
 
 Compile:
 
