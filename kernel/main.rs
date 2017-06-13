@@ -23,8 +23,9 @@ fn main()
 	printer.print_screen("Hello, World!");
 }
 
+#[no_mangle]
 #[lang = "panic_fmt"]
-extern fn panic_fmt(args: ::core::fmt::Arguments, file: &str, line: u32) -> !
+pub extern fn panic_fmt(args: ::core::fmt::Arguments, file: &str, line: u32) -> !
 {
 	let mut printer = StdioWriter::new();
 	printer.bg = Color::Black;
