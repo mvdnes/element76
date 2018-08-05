@@ -1,7 +1,7 @@
 #![crate_name = "kernel"]
 #![crate_type = "staticlib"]
 #![no_std]
-#![feature(asm, lang_items)]
+#![feature(asm, panic_implementation, panic_info_message)]
 
 extern crate rlibc;
 
@@ -21,9 +21,6 @@ pub mod kernel {
 	mod keyboard;
 }
 
-#[lang = "eh_personality"] extern fn eh_personality() {}
-
-#[allow(non_snake_case)]
 #[no_mangle]
 pub extern "C" fn _Unwind_Resume() -> ! {
     loop {}

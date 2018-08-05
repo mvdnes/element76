@@ -10,7 +10,7 @@ ASSEMBLIES=$(patsubst %.asm, %.o, $(wildcard arch/x86/asm/*.asm))
 TARGET=i686-unknown-linux-gnu
 RUSTLIB=bin/libkernel.a
 BINARY=bin/kernel.bin
-RUSTC_OPTIONS=--target $(TARGET)
+RUSTC_OPTIONS=--target $(TARGET) -C panic=abort
 
 all: $(BINARY)
 
