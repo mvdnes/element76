@@ -1,5 +1,6 @@
 *.o
-bin/libkernel.a
 bin/kernel.bin
-bin/librlibc.rlib
-rustlibdir
+Cargo.lock
+
+/target
+**/*.rs.bk

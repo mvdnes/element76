@@ -1,9 +1,5 @@
-#![crate_name = "kernel"]
-#![crate_type = "staticlib"]
 #![no_std]
 #![feature(asm, panic_implementation, panic_info_message)]
-
-extern crate rlibc;
 
 #[path = "arch/x86/"]
 pub mod platform {

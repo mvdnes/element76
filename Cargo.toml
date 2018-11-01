@@ -1,0 +1,22 @@
+[package]
+name = "element76"
+version = "0.1.0"
+authors = ["Mathijs van de Nes <git@mathijs.vd-nes.nl>"]
+edition = "2015"
+
+[lib]
+name = "kernel"
+path = "kernel_x86.rs"
+crate-type = ["staticlib"]
+
+[dependencies.compiler_builtins]
+git = "https://github.com/rust-lang-nursery/compiler-builtins"
+features = ["mem"]
+
+[profile.dev]
+panic = "abort"
+# the compiler_builtins crate requires at least some optimizations
+opt-level = 1
+
+[profile.release]
+panic = "abort"
