@@ -17,7 +17,7 @@ addons:
             - qemu-kvm
 
 install:
-    - .travis/downloadrustlibdir.sh nightly
+    - rustup target add i686-unknown-linux-gnu
 
 script:
     - make
