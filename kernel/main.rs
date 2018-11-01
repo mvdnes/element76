@@ -24,7 +24,7 @@ fn main()
     printer.print_screen("Hello, World!");
 }
 
-#[panic_implementation]
+#[panic_handler]
 #[no_mangle]
 pub fn panic(info: &PanicInfo) -> !
 {
