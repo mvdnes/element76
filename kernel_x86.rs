@@ -1,5 +1,5 @@
 #![no_std]
-#![feature(asm, panic_implementation, panic_info_message)]
+#![feature(asm, panic_info_message)]
 
 #[path = "arch/x86/"]
 pub mod platform {
