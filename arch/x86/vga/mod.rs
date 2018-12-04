@@ -1,6 +1,6 @@
 use core::marker::Copy;
 use core::clone::Clone;
-use platform::io;
+use crate::platform::io;
 
 pub enum Color {
     Black = 0,

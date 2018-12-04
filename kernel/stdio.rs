@@ -1,5 +1,5 @@
-use platform::vga::{Color, COLS, ROWS};
-use platform::vga;
+use crate::platform::vga::{Color, COLS, ROWS};
+use crate::platform::vga;
 
 pub struct StdioWriter
 {

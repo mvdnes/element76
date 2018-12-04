@@ -1,4 +1,4 @@
-use platform::io;
+use crate::platform::io;
 
 static PIC1: u16 = 0x20;
 static PIC1_DATA: u16 = 0x21;

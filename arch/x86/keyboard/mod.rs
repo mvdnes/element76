@@ -1,3 +1,4 @@
+use crate::platform;
 use core::marker::Copy;
 use core::clone::Clone;
 
@@ -12,7 +13,7 @@ impl Clone for ArchKeyboardAction { fn clone(&self) -> Self { *self } }
 
 pub fn get_key() -> ArchKeyboardAction
 {
-	let raw = unsafe { ::platform::io::inport(0x60) };
+	let raw = unsafe { platform::io::inport(0x60) };
 	let key = raw & 0x7F;
 	match raw & 0x80
 	{

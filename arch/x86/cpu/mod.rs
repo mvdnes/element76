@@ -1,3 +1,4 @@
+use crate::kernel;
 use core::marker::Copy;
 use core::clone::Clone;
 
@@ -61,7 +62,7 @@ pub fn setup()
 #[no_mangle]
 pub extern "C" fn isr_handler(args: &InterruptArguments, _fpu_sse_data: [u8; 512])
 {
-	::kernel::interrupts::handle_interrupt(args.interrupt_number, args.error_code);
+	kernel::interrupts::handle_interrupt(args.interrupt_number, args.error_code);
 
 	// Ack IRQ
 	if args.interrupt_number >= (IRQ_OFFSET as u32)

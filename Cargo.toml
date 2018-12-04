@@ -2,7 +2,7 @@
 name = "element76"
 version = "0.1.0"
 authors = ["Mathijs van de Nes <git@mathijs.vd-nes.nl>"]
-edition = "2015"
+edition = "2018"
 
 [lib]
 name = "kernel"

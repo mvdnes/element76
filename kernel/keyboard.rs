@@ -1,5 +1,5 @@
-use platform::keyboard;
-use platform::keyboard::ArchKeyboardAction;
+use crate::platform::keyboard;
+use crate::platform::keyboard::ArchKeyboardAction;
 
 pub enum KeyboardKey
 {

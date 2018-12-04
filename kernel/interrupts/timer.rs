@@ -1,5 +1,5 @@
-use kernel::stdio::StdioWriter;
-use platform::vga::Color;
+use crate::kernel::stdio::StdioWriter;
+use crate::platform::vga::Color;
 
 static mut TICK: u32 = 48;
 

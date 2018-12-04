@@ -1,4 +1,4 @@
-use platform::io;
+use crate::platform::io;
 
 static TIMER_COMMAND: u16 = 0x43;
 static TIMER_CHANNEL0: u16 = 0x40;
