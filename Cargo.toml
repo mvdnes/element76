@@ -10,7 +10,7 @@ path = "kernel_x86.rs"
 crate-type = ["staticlib"]
 
 [dependencies.compiler_builtins]
-git = "https://github.com/rust-lang-nursery/compiler-builtins"
+version = "0.1"
 features = ["mem"]
 
 [profile.dev]
