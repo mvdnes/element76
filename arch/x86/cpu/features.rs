@@ -1,6 +1,6 @@
 pub fn enable_sse() {
     unsafe {
-        asm!("mov %cr0, %eax
+        llvm_asm!("mov %cr0, %eax
               andw $$0xFFFB, %ax
               orw $$0x2, %ax
               mov %eax, %cr0

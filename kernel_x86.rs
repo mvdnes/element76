@@ -1,5 +1,6 @@
 #![no_std]
-#![feature(asm, panic_info_message)]
+#![feature(llvm_asm)]
+#![feature(panic_info_message)]
 
 #[path = "arch/x86/"]
 pub mod platform {

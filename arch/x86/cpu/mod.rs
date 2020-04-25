@@ -25,7 +25,7 @@ pub fn idle()
 {
 	unsafe
 	{
-		asm!("hlt");
+		llvm_asm!("hlt");
 	}
 }
 
@@ -35,8 +35,8 @@ pub fn halt() -> !
 	{
 		unsafe
 		{
-			asm!("cli");
-			asm!("hlt");
+			llvm_asm!("cli");
+			llvm_asm!("hlt");
 		}
 	}
 }
@@ -45,7 +45,7 @@ pub fn request_int3()
 {
 	unsafe
 	{
-		asm!("int $$0x03");
+		llvm_asm!("int $$0x03");
 	}
 	pic::disable_irq(0);
 }
@@ -77,6 +77,6 @@ pub fn enable_interrupts()
 	pic::enable_irq(1);
 	unsafe
 	{
-		asm!("sti");
+		llvm_asm!("sti");
 	}
 }
