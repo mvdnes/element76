@@ -1,5 +1,4 @@
 #![no_std]
-#![feature(llvm_asm)]
 #![feature(panic_info_message)]
 
 #[path = "arch/x86/"]

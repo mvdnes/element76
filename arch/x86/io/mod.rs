@@ -1,12 +1,22 @@
+use ::core::arch::asm;
+
 pub unsafe fn outport(address: u16, value: u8)
 {
-	llvm_asm!("out %al, %dx" :: "{al}"(value), "{dx}"(address));
+	asm!(
+		"out dx, al",
+		in("al") value,
+		in("dx") address,
+	);
 }
 
 pub unsafe fn inport(address: u16) -> u8
 {
 	let result;
-	llvm_asm!("in %dx, %al" : "={al}"(result) : "{dx}"(address));
+	asm!(
+		"in al, dx",
+		in("dx") address,
+		out("al") result,
+	);
 	result
 }
 

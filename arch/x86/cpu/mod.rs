@@ -1,6 +1,7 @@
 use crate::kernel;
 use core::marker::Copy;
 use core::clone::Clone;
+use core::arch::asm;
 
 mod gdt;
 mod idt;
@@ -25,7 +26,7 @@ pub fn idle()
 {
 	unsafe
 	{
-		llvm_asm!("hlt");
+		asm!("hlt");
 	}
 }
 
@@ -35,8 +36,10 @@ pub fn halt() -> !
 	{
 		unsafe
 		{
-			llvm_asm!("cli");
-			llvm_asm!("hlt");
+			asm!(
+				"cli",
+				"hlt",
+			);
 		}
 	}
 }
@@ -45,7 +48,7 @@ pub fn request_int3()
 {
 	unsafe
 	{
-		llvm_asm!("int $$0x03");
+		asm!("int 0x03");
 	}
 	pic::disable_irq(0);
 }
@@ -77,6 +80,6 @@ pub fn enable_interrupts()
 	pic::enable_irq(1);
 	unsafe
 	{
-		llvm_asm!("sti");
+		asm!("sti");
 	}
 }
