@@ -19,6 +19,11 @@ pub struct InterruptArguments {
 	_eip: u32, _cs: u32, _eflags: u32, _useresp: u32, _ss: u32,
 }
 
+#[repr(C)]
+pub struct SSEData {
+    data: [u8; 512],
+}
+
 impl Copy for InterruptArguments {}
 impl Clone for InterruptArguments { fn clone(&self) -> Self { *self } }
 
@@ -55,7 +60,7 @@ pub fn request_int3()
 
 pub fn setup()
 {
-    features::enable_sse();
+	features::enable_sse();
 	gdt::init_gdt();
 	pic::remap_pic(IRQ_OFFSET);
 	idt::init_idt();
@@ -63,7 +68,7 @@ pub fn setup()
 }
 
 #[no_mangle]
-pub extern "C" fn isr_handler(args: &InterruptArguments, _fpu_sse_data: [u8; 512])
+pub extern "C" fn isr_handler(args: &InterruptArguments, _fpu_sse_data: SSEData)
 {
 	kernel::interrupts::handle_interrupt(args.interrupt_number, args.error_code);
 
