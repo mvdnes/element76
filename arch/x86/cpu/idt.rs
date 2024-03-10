@@ -4,9 +4,6 @@
  * See: http://www.jamesmolloy.co.uk/tutorial_html/4.-The%20GDT%20and%20IDT.html
  */
 
-use core::marker::Copy;
-use core::clone::Clone;
-
 const IDT_COUNT: usize = 256;
 static mut IDT_ENTRIES: [IDTEntry; IDT_COUNT] = [IDTEntry { base_low: 0, selector: 0, zero: 0, flags: 0, base_high: 0 }; IDT_COUNT];
 static mut IDT_PTR: IDTPointer = IDTPointer { limit: 0, base: 0 };
@@ -36,7 +33,7 @@ pub fn init_idt()
 	unsafe
 	{
 		IDT_PTR.limit = (::core::mem::size_of::<IDTEntry>() * IDT_COUNT - 1) as u16;
-		IDT_PTR.base = &IDT_ENTRIES as *const [IDTEntry; IDT_COUNT] as usize;
+		IDT_PTR.base = core::ptr::addr_of_mut!(IDT_ENTRIES) as *const [IDTEntry; IDT_COUNT] as usize;
 
 		idt_set_gate( 0, isr0  as usize, 0x08, 0x8E);
 		idt_set_gate( 1, isr1  as usize, 0x08, 0x8E);
@@ -87,7 +84,7 @@ pub fn init_idt()
 		idt_set_gate(46, irq14 as usize, 0x08, 0x8E);
 		idt_set_gate(47, irq15 as usize, 0x08, 0x8E);
 
-		idt_flush(&IDT_PTR as *const IDTPointer as u32);
+		idt_flush(core::ptr::addr_of_mut!(IDT_PTR) as *const IDTPointer as u32);
 	}
 }
 

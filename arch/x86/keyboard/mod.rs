@@ -1,6 +1,4 @@
 use crate::platform;
-use core::marker::Copy;
-use core::clone::Clone;
 
 pub enum ArchKeyboardAction
 {

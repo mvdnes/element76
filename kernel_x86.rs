@@ -1,5 +1,8 @@
 #![no_std]
+
+#![allow(internal_features)]
 #![feature(lang_items)]
+
 #![feature(panic_info_message)]
 
 #[path = "arch/x86/"]

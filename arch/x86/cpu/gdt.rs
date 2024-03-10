@@ -4,9 +4,6 @@
  * See: http://www.jamesmolloy.co.uk/tutorial_html/4.-The%20GDT%20and%20IDT.html
  */
 
-use core::marker::Copy;
-use core::clone::Clone;
-
 const GDT_COUNT: usize = 5;
 static mut GDT_ENTRIES: [GDTEntry; GDT_COUNT] = [GDTEntry { limit_low: 0, base_low: 0, base_middle: 0, access: 0, granularity: 0, base_high: 0 }; GDT_COUNT];
 static mut GDT_PTR: GDTPointer = GDTPointer { limit: 0, base: 0 };
@@ -37,7 +34,7 @@ pub fn init_gdt()
 	unsafe
 	{
 		GDT_PTR.limit = (::core::mem::size_of::<GDTEntry>() * GDT_COUNT - 1) as u16;
-		GDT_PTR.base = &GDT_ENTRIES as *const [GDTEntry; GDT_COUNT] as usize;
+		GDT_PTR.base = core::ptr::addr_of_mut!(GDT_ENTRIES) as *const [GDTEntry; GDT_COUNT] as usize;
 
 		gdt_set_gate(0, 0, 0, 0, 0);
 		gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
@@ -45,7 +42,7 @@ pub fn init_gdt()
 		gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF);
 		gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 
-		gdt_flush(&GDT_PTR as *const GDTPointer as u32);
+		gdt_flush(core::ptr::addr_of_mut!(GDT_PTR) as *const GDTPointer as u32);
 	};
 }
 

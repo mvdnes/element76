@@ -1,5 +1,3 @@
-use core::marker::Copy;
-use core::clone::Clone;
 use crate::platform::io;
 
 pub enum Color {

@@ -1,6 +1,4 @@
 use crate::kernel;
-use core::marker::Copy;
-use core::clone::Clone;
 use core::arch::asm;
 
 mod gdt;
