@@ -1,4 +1,4 @@
-extern
+extern "C"
 {
 	static end: u32;
 }

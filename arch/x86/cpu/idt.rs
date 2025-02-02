@@ -98,7 +98,7 @@ unsafe fn idt_set_gate(n: usize, base: usize, sel: u16, flags: u8)
 	IDT_ENTRIES[n].flags = (flags & 0b11100000) | 0b01110;
 }
 
-extern
+extern "C"
 {
 	fn idt_flush(pointer: u32);
 	fn isr0 ();

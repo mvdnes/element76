@@ -59,7 +59,7 @@ unsafe fn gdt_set_gate(n: usize, base: usize, limit: usize, access: u8, gran: u8
 	GDT_ENTRIES[n].access = access;
 }
 
-extern
+extern "C"
 {
 	fn gdt_flush(pointer: u32);
 }
