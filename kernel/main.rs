@@ -36,10 +36,13 @@ pub fn panic(info: &PanicInfo) -> !
     printer.print_screen("RUST FAIL");
     printer.crlf();
 
-    match info.message() {
-        Some(args) => { let _ = printer.write_fmt(*args); },
-        None => { printer.print_screen("<No message provided>"); },
-    };
+    if let Some(location) = info.location() {
+        let _ = writeln!(printer, "Panic in '{}' at line {}", location.file(), location.line());
+    }
+    else {
+        let _ = writeln!(printer, "Panic at unknown location");
+    }
+    let _ = write!(printer, "{}", info.message());
 
     match info.location() {
         Some(location) => {

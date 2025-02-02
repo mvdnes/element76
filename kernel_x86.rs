@@ -3,8 +3,6 @@
 #![allow(internal_features)]
 #![feature(lang_items)]
 
-#![feature(panic_info_message)]
-
 #[path = "arch/x86/"]
 pub mod platform {
 	pub mod vga;
