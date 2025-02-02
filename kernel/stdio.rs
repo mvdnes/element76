@@ -111,30 +111,6 @@ impl StdioWriter
 		vga::move_cursor(self.xpos, self.ypos);
 	}
 
-	pub fn print_dec(&mut self, v: u32)
-	{
-		if v == 0
-		{
-			self.print_char('0');
-			return;
-		}
-
-		let mut fac = 1;
-		let mut nv = v;
-		while fac <= v { fac *= 10; }
-		fac /= 10;
-		while fac > 0
-		{
-			let n = nv / fac;
-			let c = n as u8 + '0' as u8;
-			self.raw_print_char(c);
-			self.go_right();
-			nv -= n * fac;
-			fac /= 10;
-		}
-		self.set_cursor();
-	}
-
 	pub fn print_bin(&mut self, v: u32, sz: u32)
 	{
 		self.print_screen("0b");
@@ -204,8 +180,14 @@ impl ::core::fmt::Write for StdioWriter
 	{
 		for b in s.bytes()
 		{
-			self.raw_print_char(b);
-			self.go_right();
+			if b == b'\n' {
+				self.xpos = 0;
+				self.ypos = if self.ypos == ROWS - 1 { 0 } else { self.ypos + 1 };
+			}
+			else {
+				self.raw_print_char(b);
+				self.go_right();
+			}
 		}
 		self.set_cursor();
 		Ok(())

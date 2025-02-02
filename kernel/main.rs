@@ -44,17 +44,5 @@ pub fn panic(info: &PanicInfo) -> !
     }
     let _ = write!(printer, "{}", info.message());
 
-    match info.location() {
-        Some(location) => {
-            printer.crlf();
-            printer.print_screen(location.file());
-            printer.print_char(':');
-            printer.print_dec(location.line());
-            printer.print_char(':');
-            printer.print_dec(location.column());
-        },
-        None => {},
-    }
-
     platform::cpu::halt();
 }
